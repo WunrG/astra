@@ -1,9 +1,1 @@
-{
-  "name":"Astra AI Trading Assistant",
-  "short_name":"Astra",
-  "start_url":"./index.html",
-  "display":"standalone",
-  "background_color":"#090b12",
-  "theme_color":"#090b12",
-  "icons":[]
-}
+{"name":"Astra AI Trading Assistant","short_name":"Astra","start_url":"./index.html","display":"standalone","background_color":"#090b12","theme_color":"#090b12","description":"Astra paper-trading dashboard","icons":[]}
