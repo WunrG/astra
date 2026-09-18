@@ -1,6 +1,0 @@
-const CACHE="astra-v4-cache";
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["./","./index.html","./manifest.json"])))});
-self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()));
-self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request)))});
-self.addEventListener("push",e=>{let data={title:"Astra alert",body:"New market alert"};try{if(e.data)data=e.data.json()}catch(_){if(e.data)data.body=e.data.text()}e.waitUntil(self.registration.showNotification(data.title,{body:data.body,tag:"astra-push",renotify:true,data:{url:"./"}}))});
-self.addEventListener("notificationclick",e=>{e.notification.close();e.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(cs=>{for(const c of cs)if("focus" in c)return c.focus();return clients.openWindow("./")}))});
