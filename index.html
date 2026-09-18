@@ -1,23 +1,211 @@
-<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#090b12"><link rel="manifest" href="manifest.json"><title>Astra v3.1</title>
-<style>*{box-sizing:border-box}body{margin:0;background:#090b12;color:#f4f7fb;font-family:system-ui,-apple-system,sans-serif}.app{max-width:620px;margin:auto;padding:18px 14px 90px}.top,.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{font-size:25px;font-weight:800}.pill{font-size:11px;background:#17201b;color:#77e6a8;padding:7px 10px;border-radius:20px}.card{background:#111520;border:1px solid #202636;border-radius:18px;padding:16px;margin:12px 0}.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}.tabs button{border:1px solid #252c3b;background:#111520;color:#aeb7c8;padding:9px 12px;border-radius:11px}.tabs button.active{background:#eef1f5;color:#090b12}.label,.muted{color:#8e98ab;font-size:12px}.price{font-size:30px;font-weight:800;margin-top:4px}.green{color:#73e2a4}.red{color:#ff7785}.signal{padding:8px 11px;border-radius:10px;font-weight:800;font-size:12px}.buy{background:#123722;color:#7df0aa}.sell{background:#3a1820;color:#ff8b98}.hold{background:#2b2818;color:#f3d77b}.chart{width:100%;height:230px;background:#0b0e16;border-radius:12px;margin-top:12px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.metric{background:#0b0e16;padding:11px;border-radius:12px}.metric b{display:block;margin-top:4px}.analysis{color:#cbd2df;line-height:1.5;font-size:14px}.button{width:100%;border:0;border-radius:13px;padding:13px;background:#f0f2f6;color:#090b12;font-weight:800;margin-top:10px}.trade{padding:12px 0;border-bottom:1px solid #202636}.nav{position:fixed;bottom:0;left:0;right:0;background:#0b0e15ee;border-top:1px solid #202636;display:flex;justify-content:center;gap:6px;padding:9px}.nav button{background:transparent;border:0;color:#8e98ab;padding:10px 15px}.nav button.active{color:#fff;background:#171c28;border-radius:11px}</style></head>
-<body><div class="app"><div class="top"><div class="logo">✦ Astra</div><div class="pill">PAPER MODE</div></div><div id="screen"></div></div>
-<div class="nav"><button onclick="page('home',this)" class="active">Astra</button><button onclick="page('portfolio',this)">Portfolio</button><button onclick="page('alerts',this)">Alerts</button><button onclick="page('settings',this)">Settings</button></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
+<link rel="manifest" href="manifest.json">
+<title>Astra v4</title>
+<style>
+:root{--bg:#07090d;--card:#10141b;--card2:#151a23;--text:#f4f6f8;--muted:#8d97a5;--line:#252c36;--green:#39d98a;--red:#ff5d70;--yellow:#f3c84b;--blue:#6fa8ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button{font:inherit}
+.app{max-width:900px;margin:auto;padding:18px 16px 96px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:27px;font-weight:800}.badge{font-size:12px;color:var(--green);border:1px solid #234d3a;padding:7px 10px;border-radius:999px;background:#0d1b15}
+.coins{display:flex;gap:8px;overflow:auto;margin-bottom:14px}.coin{border:1px solid var(--line);background:#0b0e13;color:var(--muted);padding:10px 16px;border-radius:14px}.coin.active{background:#eef0f3;color:#0b0d11;border-color:#eef0f3}
+.card{background:linear-gradient(180deg,var(--card),#0d1117);border:1px solid #1d242e;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 10px 30px #0004}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.muted{color:var(--muted)}.price{font-size:38px;font-weight:800;letter-spacing:-1px}.change.up{color:var(--green)}.change.down{color:var(--red)}.signal{padding:9px 13px;border-radius:12px;font-weight:800}.BUY{background:#113b29;color:var(--green)}.SELL{background:#421c24;color:var(--red)}.HOLD{background:#3a3212;color:var(--yellow)}
+canvas{width:100%;height:250px;display:block;margin-top:12px;background:#0a0d12;border-radius:14px}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{background:#0b1016;border:1px solid var(--line);padding:8px 10px;border-radius:10px;font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{background:#0b1016;border:1px solid var(--line);border-radius:14px;padding:12px}.metric b{display:block;font-size:18px;margin-top:4px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:#090c12ee;backdrop-filter:blur(16px);border-top:1px solid #202631;display:flex;justify-content:center;z-index:5}.tabs button{flex:1;max-width:180px;border:0;background:none;color:#7e8897;padding:15px 8px 17px}.tabs button.active{color:#fff;font-weight:800}
+.primary{width:100%;border:0;border-radius:14px;padding:14px;background:#f0f2f5;color:#090b0f;font-weight:800}.secondary{border:1px solid var(--line);background:#0d1117;color:#fff;border-radius:12px;padding:10px 12px}.danger{color:var(--red)}
+.list{display:flex;flex-direction:column;gap:8px}.trade{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:13px;background:#0b1016;border:1px solid var(--line);border-radius:14px}.tag{font-size:11px;font-weight:800;padding:4px 7px;border-radius:7px;background:#1b222c}.positive{color:var(--green)}.negative{color:var(--red)}
+.hidden{display:none}.notice{padding:12px;border-radius:12px;background:#151b24;color:#b8c1ce;font-size:13px;line-height:1.5}.empty{text-align:center;padding:28px;color:var(--muted)}
+input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--line);border-radius:12px;padding:11px}label{font-size:13px;color:var(--muted);display:block;margin:12px 0 6px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="brand">✦ Astra</div><div class="badge">PAPER MODE</div></div>
+
+  <section id="view-astra">
+    <div class="coins" id="coins"></div>
+    <div class="card">
+      <div class="row"><div><div class="muted" id="pair">Bitcoin / USDT</div><div class="price" id="price">—</div><div id="change" class="change">Loading…</div></div><div id="signal" class="signal HOLD">HOLD</div></div>
+      <canvas id="chart"></canvas>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div class="card">
+      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v4 engine</span></div>
+      <p id="analysis" class="muted">Loading market structure…</p>
+      <div class="grid" id="metrics"></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Paper position</h3>
+      <div id="positionBox" class="notice">No open position.</div>
+      <div style="height:10px"></div>
+      <div class="grid">
+        <button class="primary" id="openBtn">Open paper position</button>
+        <button class="secondary" id="closeBtn">Close position</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-portfolio" class="hidden">
+    <div class="card"><div class="row"><div><div class="muted">Paper equity</div><div class="price" id="equity">$100.00</div></div><div><div class="muted">Total P/L</div><div id="totalPnl" class="price" style="font-size:25px">$0.00</div></div></div></div>
+    <div class="grid">
+      <div class="metric"><span class="muted">Trades</span><b id="tradeCount">0</b></div>
+      <div class="metric"><span class="muted">Wins</span><b id="wins">0</b></div>
+      <div class="metric"><span class="muted">Losses</span><b id="losses">0</b></div>
+      <div class="metric"><span class="muted">Win rate</span><b id="winRate">0%</b></div>
+    </div>
+    <div class="card"><div class="row"><h3 style="margin:0">Trade history</h3><button class="secondary" id="clearHistory">Clear</button></div><div id="history" class="list" style="margin-top:12px"></div></div>
+  </section>
+
+  <section id="view-alerts" class="hidden">
+    <div class="card"><h2 style="margin-top:0">Alerts</h2><p class="muted">Astra can send a phone notification when you test an alert. Background push when the app is fully closed needs a push server later.</p><button class="primary" id="enableAlerts">Enable notifications</button><div id="alertStatus" class="notice" style="margin-top:12px">Checking notification permission…</div></div>
+    <div class="card"><h3 style="margin-top:0">Signal alerts</h3><label>Alert when Astra signal changes</label><select id="signalAlerts"><option value="on">ON</option><option value="off">OFF</option></select>
+    <label>Large move threshold</label><select id="moveThreshold"><option value="2">2%</option><option value="3">3%</option><option value="5">5%</option></select>
+    <button class="secondary" id="testAlert" style="margin-top:12px">Test phone notification</button></div>
+  </section>
+
+  <section id="view-settings" class="hidden">
+    <div class="card"><h2 style="margin-top:0">Risk controls</h2>
+      <label>Risk per trade</label><select id="risk"><option>0.5%</option><option selected>1%</option><option>2%</option></select>
+      <label>Daily loss limit</label><select id="dailyLimit"><option>2%</option><option selected>3%</option><option>5%</option></select>
+      <label>Leverage</label><select disabled><option>0x — paper spot only</option></select>
+    </div>
+    <div class="card"><h3 style="margin-top:0">How v4 works</h3><div class="notice">Astra v4 is a rules-based paper-trading simulator. It combines trend, RSI, MACD-style momentum, volume, volatility and support/resistance into an explainable signal. It does not place real orders and does not use a private exchange key.</div></div>
+    <div class="card"><button class="secondary" id="resetAstra">Reset paper account</button></div>
+  </section>
+</div>
+
+<nav class="tabs">
+<button data-view="astra" class="active">Astra</button><button data-view="portfolio">Portfolio</button><button data-view="alerts">Alerts</button><button data-view="settings">Settings</button>
+</nav>
+
 <script>
-const coins={BTCUSDT:{name:'Bitcoin',symbol:'BTC',dec:0},ETHUSDT:{name:'Ethereum',symbol:'ETH',dec:2},SOLUSDT:{name:'Solana',symbol:'SOL',dec:2}};
-let selected='BTCUSDT',balance=Number(localStorage.getItem('astra_balance')||100),trades=JSON.parse(localStorage.getItem('astra_trades')||'[]'),lastSignal='HOLD',lastPrice=0;
-function fmt(n,d=2){return '$'+Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d})}
-function save(){localStorage.setItem('astra_balance',balance);localStorage.setItem('astra_trades',JSON.stringify(trades))}
-async function fetchKlines(symbol){let r=await fetch('https://api.binance.com/api/v3/klines?symbol='+symbol+'&interval=1h&limit=80');if(!r.ok)throw Error();return r.json()}
-function analyze(k){let c=k.map(x=>+x[4]),s=n=>c.slice(-n).reduce((a,b)=>a+b,0)/n,fast=s(9),slow=s(21),r=c.slice(-15),g=0,l=0;for(let i=1;i<r.length;i++){let d=r[i]-r[i-1];d>0?g+=d:l-=d}let rs=l?g/l:99,rsi=100-100/(1+rs),score=(fast>slow?1:-1)+(rsi<35?1:0)+(rsi>70?-1:0);let signal=score>=1?'BUY':score<=-1?'SELL':'HOLD',avg=r.reduce((a,b)=>a+b,0)/r.length,sd=Math.sqrt(r.reduce((a,b)=>a+(b-avg)**2,0)/r.length);return{c,fast,slow,rsi,signal,vol:sd/avg*100}}
-function draw(k){let c=document.getElementById('chart');if(!c)return;let x=c.getContext('2d'),d=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;c.width=w*d;c.height=h*d;x.scale(d,d);let v=k.map(q=>+q[4]),mn=Math.min(...v),mx=Math.max(...v);x.strokeStyle='#252c3b';for(let i=1;i<5;i++){x.beginPath();x.moveTo(0,i*h/5);x.lineTo(w,i*h/5);x.stroke()}x.strokeStyle='#76e6a8';x.lineWidth=2;x.beginPath();v.forEach((p,i)=>{let xx=12+i*(w-24)/(v.length-1),yy=h-12-(p-mn)/(mx-mn||1)*(h-24);i?x.lineTo(xx,yy):x.moveTo(xx,yy)});x.stroke()}
-async function load(){let c=coins[selected];document.getElementById('screen').innerHTML='<div class="tabs">'+Object.keys(coins).map(s=>'<button class="'+(s===selected?'active':'')+'" onclick="selectCoin(\''+s+'\')">'+coins[s].symbol+'</button>').join('')+'</div><div class="card"><div class="row"><div><div class="label">'+c.name+' / USDT</div><div id="price" class="price">Loading...</div><div id="move" class="muted">Loading...</div></div><span id="signal" class="signal hold">HOLD</span></div><canvas id="chart" class="chart"></canvas><div id="metrics" class="metrics"></div></div><div class="card"><div class="row"><b>Astra analysis</b><span class="muted">v3.1 engine</span></div><p id="analysis" class="analysis">Analyzing...</p><button class="button" onclick="paperTrade()">Simulate paper trade</button></div>';
-try{let k=await fetchKlines(selected),a=analyze(k),p=a.c.at(-1),pct=(p/a.c.at(-2)-1)*100;lastPrice=p;lastSignal=a.signal;document.getElementById('price').textContent=fmt(p,c.dec);document.getElementById('move').textContent=(pct>=0?'+':'')+pct.toFixed(2)+'% last hour';document.getElementById('move').className=pct>=0?'green':'red';document.getElementById('signal').textContent=a.signal;document.getElementById('signal').className='signal '+a.signal.toLowerCase();document.getElementById('metrics').innerHTML='<div class="metric"><span class="label">RSI</span><b>'+a.rsi.toFixed(1)+'</b></div><div class="metric"><span class="label">Fast MA</span><b>'+fmt(a.fast,c.dec)+'</b></div><div class="metric"><span class="label">Volatility</span><b>'+a.vol.toFixed(2)+'%</b></div>';document.getElementById('analysis').textContent=(a.signal==='BUY'?'Momentum is positive. ':a.signal==='SELL'?'Momentum is weakening. ':'Signals are mixed. ')+'The demo engine combines moving averages, RSI and recent volatility. This is not financial advice.';draw(k)}catch(e){analysis.textContent='Market data is temporarily unavailable. Refresh and try again.'}}
-function selectCoin(s){selected=s;load()}
-function paperTrade(){trades.unshift({time:new Date().toISOString(),coin:coins[selected].symbol,price:lastPrice,signal:lastSignal,pnl:0});trades=trades.slice(0,50);save();const btn=document.querySelector('.button');if(btn){const old=btn.textContent;btn.textContent='✓ Paper trade recorded';setTimeout(()=>btn.textContent=old,1800)}}
-function portfolio(){document.getElementById('screen').innerHTML='<div class="card"><div class="label">Paper equity</div><div class="price">'+fmt(balance)+'</div><div class="muted">Real exchange trading is disabled.</div></div><div class="card"><b>Trade history</b>'+(trades.length?trades.map(t=>'<div class="trade"><div class="row"><b>'+t.coin+' · '+t.signal+'</b><span class="muted">'+new Date(t.time).toLocaleString()+'</span></div><div class="muted">'+fmt(t.price)+' · P/L '+fmt(t.pnl)+'</div></div>').join(''):'<p class="muted">No paper trades yet.</p>')+'</div>'}
-async function alerts(){document.getElementById('screen').innerHTML='<div class="card"><b>Phone alerts</b><p class="analysis">Enable supported browser notifications. True background push alerts require a server-side push service.</p><button class="button" onclick="enableAlerts()">Enable notifications</button></div>'}
-async function enableAlerts(){if(!('Notification'in window)){alert('Notifications are not supported here.');return}let p=await Notification.requestPermission();if(p==='granted'){let r=await navigator.serviceWorker.ready;r.showNotification('Astra alerts enabled',{body:'Astra notifications are enabled.'})}else alert('Permission was not granted.')}
-function settings(){document.getElementById('screen').innerHTML='<div class="card"><b>Risk controls</b><div class="trade">Risk per trade <b>1%</b></div><div class="trade">Daily loss limit <b>3%</b></div><div class="trade">Leverage <b>0×</b></div><div class="trade">Mode <b>PAPER</b></div></div><div class="card"><b>Data</b><p class="muted">BTC, ETH and SOL use public market data. No exchange credentials are stored.</p></div>'}
-function page(p,b){document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');p==='home'?load():p==='portfolio'?portfolio():p==='alerts'?alerts():settings()}
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');load();setInterval(()=>{if(document.querySelector('.nav button.active')?.textContent==='Astra')load()},60000);
-</script></body></html>
+const COINS={
+ BTC:{symbol:"BTCUSDT",name:"Bitcoin",pair:"Bitcoin / USDT"},
+ ETH:{symbol:"ETHUSDT",name:"Ethereum",pair:"Ethereum / USDT"},
+ SOL:{symbol:"SOLUSDT",name:"Solana",pair:"Solana / USDT"},
+ BNB:{symbol:"BNBUSDT",name:"BNB",pair:"BNB / USDT"},
+ XRP:{symbol:"XRPUSDT",name:"XRP",pair:"XRP / USDT"},
+ ADA:{symbol:"ADAUSDT",name:"Cardano",pair:"Cardano / USDT"}
+};
+let coin="BTC", candles=[], analysis=null;
+const KEY="astra_v4_state";
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function money(x){return "$"+Number(x).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmt(x){return Number(x).toLocaleString(undefined,{maximumFractionDigits:x<1?5:2});}
+function sma(a,n){return a.slice(-n).reduce((s,x)=>s+x,0)/n;}
+function ema(a,n){let k=2/(n+1), e=a[0]; for(let i=1;i<a.length;i++)e=a[i]*k+e*(1-k); return e;}
+function rsi(a,n=14){if(a.length<n+1)return 50;let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];if(d>0)g+=d;else l-=d}return l===0?100:100-(100/(1+g/l));}
+function stdev(a){let m=a.reduce((s,x)=>s+x,0)/a.length;return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/a.length);}
+function calcMACD(a){return ema(a,12)-ema(a,26);}
+function calcATR(c,n=14){if(c.length<n+1)return 0;let trs=[];for(let i=c.length-n;i<c.length;i++){let h=+c[i][2],lo=+c[i][3],pc=+c[i-1][4];trs.push(Math.max(h-lo,Math.abs(h-pc),Math.abs(lo-pc)))}return trs.reduce((s,x)=>s+x,0)/trs.length;}
+function analyze(){
+ const closes=candles.map(x=>+x[4]), vols=candles.map(x=>+x[5]), last=closes.at(-1);
+ const fast=ema(closes,9), slow=ema(closes,21), r=rsi(closes,14), macd=calcMACD(closes);
+ const avgVol=sma(vols,20), volRatio=vols.at(-1)/avgVol, atr=calcATR(candles,14);
+ const recent=closes.slice(-20), support=Math.min(...recent), resistance=Math.max(...recent);
+ let score=0, reasons=[];
+ if(fast>slow){score++;reasons.push("short-term trend is above the longer trend")}else{score--;reasons.push("short-term trend is below the longer trend")}
+ if(r<35){score++;reasons.push("RSI is in a weak/oversold zone")} else if(r>70){score--;reasons.push("RSI is in an elevated/overbought zone")} else reasons.push("RSI is in a neutral zone");
+ if(macd>0){score++;reasons.push("momentum is positive")}else{score--;reasons.push("momentum is negative")}
+ if(volRatio>1.2){reasons.push("volume is above its recent average")}
+ const signal=score>=2?"BUY":score<=-2?"SELL":"HOLD";
+ const strength=Math.min(95,55+Math.abs(score)*12+(volRatio>1.2?5:0));
+ const volatility=(stdev(closes.slice(-20))/sma(closes.slice(-20),20))*100;
+ return {last,fast,slow,r,macd,volRatio,atr,support,resistance,score,signal,strength,volatility,reasons};
+}
+async function fetchData(){
+ const url=`https://api.binance.com/api/v3/klines?symbol=${COINS[coin].symbol}&interval=1h&limit=100`;
+ try{
+  const res=await fetch(url,{cache:"no-store"}); if(!res.ok)throw Error("Market data unavailable");
+  candles=await res.json(); analysis=analyze(); render();
+  maybeSignalAlert();
+ }catch(e){document.getElementById("analysis").textContent="Could not load market data right now. Refresh and try again.";console.error(e)}
+}
+function render(){
+ const a=analysis;if(!a)return;
+ document.getElementById("pair").textContent=COINS[coin].pair;
+ document.getElementById("price").textContent=money(a.last);
+ const prev=+candles.at(-2)[4], pct=(a.last/prev-1)*100;
+ const ch=document.getElementById("change");ch.textContent=(pct>=0?"+":"")+pct.toFixed(2)+"% last hour";ch.className="change "+(pct>=0?"up":"down");
+ const sig=document.getElementById("signal");sig.textContent=a.signal+" "+a.strength+"%";sig.className="signal "+a.signal;
+ document.getElementById("chips").innerHTML=`<span class="chip">Support ${money(a.support)}</span><span class="chip">Resistance ${money(a.resistance)}</span><span class="chip">ATR ${money(a.atr)}</span><span class="chip">Vol ${a.volatility.toFixed(2)}%</span>`;
+ document.getElementById("analysis").textContent=`Astra sees ${a.signal.toLowerCase()} conditions with ${a.strength}% signal strength. ${a.reasons.join("; ")}. This is a simulator, not financial advice.`;
+ document.getElementById("metrics").innerHTML=[
+ ["RSI",a.r.toFixed(1)],["Fast EMA",money(a.fast)],["Slow EMA",money(a.slow)],["Momentum",a.macd>=0?"Positive":"Negative"],
+ ["Volume",a.volRatio.toFixed(2)+"× avg"],["Volatility",a.volatility.toFixed(2)+"%"],["Score",a.score>0?"+":""+a.score],["1h move",(pct>=0?"+":"")+pct.toFixed(2)+"%"]
+ ].map(x=>`<div class="metric"><span class="muted">${x[0]}</span><b>${x[1]}</b></div>`).join("");
+ drawChart();
+ renderPosition();
+}
+function drawChart(){
+ const c=document.getElementById("chart"),dpr=devicePixelRatio||1,w=c.clientWidth,h=250;c.width=w*dpr;c.height=h*dpr;const ctx=c.getContext("2d");ctx.scale(dpr,dpr);
+ ctx.clearRect(0,0,w,h);const vals=candles.slice(-60).map(x=>+x[4]),min=Math.min(...vals),max=Math.max(...vals),pad=18;
+ ctx.strokeStyle="#202631";ctx.lineWidth=1;for(let i=1;i<4;i++){let y=pad+(h-pad*2)*i/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ ctx.beginPath();vals.forEach((v,i)=>{let x=pad+(w-pad*2)*i/(vals.length-1),y=pad+(h-pad*2)*(1-(v-min)/(max-min||1));i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.strokeStyle="#42d995";ctx.lineWidth=2.5;ctx.stroke();
+}
+function renderPosition(){
+ const p=state.positions.find(x=>x.coin===coin&&x.open);
+ const box=document.getElementById("positionBox");
+ if(!p){box.textContent="No open position for "+coin+".";document.getElementById("openBtn").disabled=false;document.getElementById("closeBtn").disabled=true;return}
+ const pnl=(analysis.last-p.entry)*(p.side==="LONG"?1:-1)*p.qty;
+ box.innerHTML=`<b>${p.side} ${coin}</b><br>Entry ${money(p.entry)} · Size ${money(p.value)} · Live P/L <span class="${pnl>=0?"positive":"negative"}">${money(pnl)}</span>`;
+ document.getElementById("openBtn").disabled=true;document.getElementById("closeBtn").disabled=false;
+}
+function openPosition(){
+ if(!analysis)return;
+ if(state.positions.some(x=>x.coin===coin&&x.open)){return}
+ const value=state.cash*(state.risk/100), qty=value/analysis.last;
+ const p={id:Date.now(),coin,side:analysis.signal==="SELL"?"SHORT":"LONG",entry:analysis.last,qty,value,open:true,time:new Date().toISOString()};
+ state.positions.push(p);state.cash-=value;save();renderPosition();updatePortfolio();
+}
+function closePosition(){
+ const p=state.positions.find(x=>x.coin===coin&&x.open);if(!p||!analysis)return;
+ const pnl=(analysis.last-p.entry)*(p.side==="LONG"?1:-1)*p.qty;
+ state.cash+=p.value+pnl;p.open=false;p.exit=analysis.last;p.pnl=pnl;p.exitTime=new Date().toISOString();state.trades.unshift(p);state.trades=state.trades.slice(0,100);save();render();updatePortfolio();
+}
+function updatePortfolio(){
+ let openValue=0,realized=0,w=0,l=0;
+ state.trades.forEach(t=>{realized+=t.pnl||0;if((t.pnl||0)>0)w++;if((t.pnl||0)<0)l++});
+ state.positions.filter(p=>p.open).forEach(p=>openValue+=p.value);
+ const equity=state.cash+openValue+realized;
+ document.getElementById("equity").textContent=money(equity);document.getElementById("totalPnl").textContent=money(equity-100);
+ document.getElementById("tradeCount").textContent=state.trades.length;document.getElementById("wins").textContent=w;document.getElementById("losses").textContent=l;
+ document.getElementById("winRate").textContent=(w+l?((w/(w+l))*100).toFixed(0):0)+"%";
+ const h=document.getElementById("history");h.innerHTML=state.trades.length?state.trades.map(t=>`<div class="trade"><div><b>${t.coin} ${t.side}</b><br><span class="muted">${new Date(t.exitTime).toLocaleString()}</span></div><div style="text-align:right"><b class="${t.pnl>=0?"positive":"negative"}">${t.pnl>=0?"+":""}${money(t.pnl)}</b><br><span class="muted">${money(t.entry)} → ${money(t.exit)}</span></div></div>`).join(""):'<div class="empty">No closed trades yet.</div>';
+}
+async function notify(title,body){
+ if(!("Notification" in window)){return}
+ if(Notification.permission!=="granted")return;
+ try{const reg=await navigator.serviceWorker.ready;await reg.showNotification(title,{body,tag:"astra-v4",renotify:true})}catch(e){console.warn(e)}
+}
+let lastSignal="";
+function maybeSignalAlert(){if(!analysis)return;if(state.signalAlerts==="on"&&lastSignal&&lastSignal!==analysis.signal)notify(`Astra: ${coin} ${analysis.signal}`,`Signal changed to ${analysis.signal} at ${money(analysis.last)}.`);lastSignal=analysis.signal}
+async function enableNotifications(){
+ if(!("Notification" in window)){document.getElementById("alertStatus").textContent="This browser does not support notifications.";return}
+ const p=await Notification.requestPermission();document.getElementById("alertStatus").textContent=p==="granted"?"Notifications enabled.":"Notifications are not enabled.";
+}
+function setView(v){
+ document.querySelectorAll("section[id^=view-]").forEach(x=>x.classList.add("hidden"));document.getElementById("view-"+v).classList.remove("hidden");
+ document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));
+ if(v==="portfolio")updatePortfolio();if(v==="alerts")refreshAlertStatus();
+}
+function refreshAlertStatus(){document.getElementById("alertStatus").textContent=("Notification" in window)?("Permission: "+Notification.permission):"Notifications unavailable";}
+function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll(".coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;lastSignal="";renderCoins();fetchData()})}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+document.getElementById("openBtn").onclick=openPosition;document.getElementById("closeBtn").onclick=closePosition;
+document.getElementById("enableAlerts").onclick=enableNotifications;document.getElementById("testAlert").onclick=()=>notify("Astra test alert","Your Astra v4 phone notifications are working.");
+document.getElementById("clearHistory").onclick=()=>{if(confirm("Clear closed trade history?")){state.trades=[];save();updatePortfolio()}};
+document.getElementById("risk").onchange=e=>{state.risk=parseFloat(e.target.value);save()};document.getElementById("dailyLimit").onchange=e=>{state.dailyLimit=parseFloat(e.target.value);save()};
+document.getElementById("signalAlerts").onchange=e=>{state.signalAlerts=e.target.value;save()};document.getElementById("moveThreshold").onchange=()=>{};
+document.getElementById("resetAstra").onclick=()=>{if(confirm("Reset the paper account to $100 and clear positions/history?")){state={cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};save();location.reload()}};
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(console.warn);
+renderCoins();updatePortfolio();fetchData();setInterval(fetchData,60000);window.addEventListener("resize",()=>analysis&&drawChart());
+</script>
+</body>
+</html>
