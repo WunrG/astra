@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090d">
 <link rel="manifest" href="manifest.json">
-<title>Astra v6.5</title>
+<title>Astra v6.6</title>
 <style>
 :root{--bg:#07090d;--card:#10141b;--card2:#151a23;--text:#f4f6f8;--muted:#8d97a5;--line:#252c36;--green:#39d98a;--red:#ff5d70;--yellow:#f3c84b;--blue:#6fa8ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button{font:inherit}
@@ -23,7 +23,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
 
 /* v6.4 Investigation UI */
 .inv-status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#101720}.inv-status-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.status-pill{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;white-space:nowrap}.status-verified{background:#102a20;color:#61e6a8;border:1px solid #1e513c}.status-partial{background:#142438;color:#8bc1ff;border:1px solid #274769}.status-unverified{background:#322a12;color:#ffd86b;border:1px solid #5a4d22}.status-contradicted{background:#35161b;color:#ff8e98;border:1px solid #632b34}.status-insufficient{background:#20252d;color:#b9c1cc;border:1px solid #343c48}.inv-section{padding:10px 0;border-top:1px solid #1b2430}.inv-section:first-of-type{border-top:0}.inv-section-title{font-size:12px;font-weight:900;margin-bottom:5px;color:#f0f4fb}.inv-section p{margin:5px 0;color:#c0c8d4}.evidence-tag{display:inline-block;font-size:9px;font-weight:900;letter-spacing:.02em;padding:2px 5px;border-radius:5px;margin-right:4px;vertical-align:1px}.ev-verified{background:#102a20;color:#61e6a8}.ev-claimed{background:#182438;color:#8bc1ff}.ev-unverified{background:#322a12;color:#ffd86b}.ev-contradicted{background:#35161b;color:#ff8e98}.inv-source-title{font-size:11px;font-weight:800;color:#dbe6ff;margin-top:10px}.investigation code{white-space:normal;color:#d5ddea;font-family:inherit;background:#131922;padding:1px 4px;border-radius:4px}
-.queuebar{display:flex;gap:8px;margin-top:10px}.queuebar button{flex:1}.queue-status{margin-top:10px;font-size:12px;color:#9eabc0}.cache-note{font-size:10px;color:#7f90aa;margin-top:6px}
+.queuebar{display:flex;gap:8px;margin-top:10px}.queuebar button{flex:1}.queue-status{margin-top:10px;font-size:12px;color:#9eabc0}.cache-note{font-size:10px;color:#7f90aa;margin-top:6px}.paper-filter{margin-top:11px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#0f151d}.paper-filter-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.paper-filter-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.filter-pill{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;white-space:nowrap}.filter-eligible{background:#102a20;color:#61e6a8;border:1px solid #1e513c}.filter-watch{background:#322a12;color:#ffd86b;border:1px solid #5a4d22}.filter-reject{background:#35161b;color:#ff8e98;border:1px solid #632b34}.filter-reasons{margin-top:8px;font-size:11px;line-height:1.5;color:#aeb8c5}.filter-reasons b{color:#dce5f2}.filter-rule{margin-top:7px;font-size:10px;color:#71819a}
 </style>
 </head>
 <body>
@@ -44,7 +44,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
     </div>
 
     <div class="card">
-      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v6.5 engine</span></div>
+      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v6.6 engine</span></div>
       <p id="analysis" class="muted">Loading market structure…</p>
       <div class="grid" id="metrics"></div>
     </div>
@@ -68,14 +68,14 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
 
   <section id="view-scanner" class="hidden">
     <div class="card">
-      <div class="row"><div><h2 style="margin:0">Meme Radar</h2><div class="muted" style="margin-top:5px">Live Solana discovery from the Astra Intelligence backend. Research shortlist only.</div></div><span class="tag">v6.5</span></div>
+      <div class="row"><div><h2 style="margin:0">Meme Radar</h2><div class="muted" style="margin-top:5px">Live Solana discovery from the Astra Intelligence backend. Research shortlist only.</div></div><span class="tag">v6.6</span></div>
       <button class="primary" id="scanBtn" style="margin-top:14px">Scan market</button>
       <div class="queuebar"><button class="secondary" id="investigateTopBtn" disabled>🧠 Investigate top 3</button></div>
       <div id="queueStatus" class="queue-status">AI queue ready. Manual investigations only until you enable auto research in Settings.</div>
       <div id="scanStatus" class="notice" style="margin-top:12px">Ready to scan.</div>
     </div>
     <div class="card"><div class="row"><h3 style="margin:0">Candidates</h3><span class="muted" id="scanTime">Not scanned</span></div><div id="scanResults" class="list" style="margin-top:12px"><div class="empty">Run a scan to find candidates.</div></div></div>
-    <div class="card"><div class="notice">Research Priority measures which tokens deserve investigation first. It is not a buy score and does not prove a token is safe. Risk flags highlight conditions Astra should investigate before any paper trade.</div></div>
+    <div class="card"><div class="notice">Research Priority decides what Astra investigates first. After AI research, the transparent Paper-test Filter marks a token PAPER-TEST ELIGIBLE, WATCH / MANUAL REVIEW, or REJECT FROM PAPER TEST. These labels control simulated research only and are not buy recommendations.</div></div>
   </section>
 
   <section id="view-portfolio" class="hidden">
@@ -344,9 +344,45 @@ function setCachedInvestigation(address,data){
  for(const [k,v] of Object.entries(cache))if(!v?.savedAt||Date.now()-v.savedAt>INVESTIGATION_CACHE_TTL)delete cache[k];
  localStorage.setItem(INVESTIGATION_CACHE_KEY,JSON.stringify(cache));
 }
-function renderInvestigation(box,data,cached=false){
+function paperTestFilter(candidate,data){
+ const status=reportStatus(data?.report||"").label;
+ const flags=Array.isArray(candidate?.riskFlags)?candidate.riskFlags:[];
+ const blockers=[],cautions=[],positives=[];
+ const liq=Number(candidate?.liquidityUsd),buy=Number(candidate?.buyRatioPct),age=Number(candidate?.ageMinutes),move=Number(candidate?.priceChange1hPct),priority=Number(candidate?.researchPriority);
+ if(status.includes("CONTRADICTED"))blockers.push("AI research found contradictory / likely impersonation evidence");
+ if(Number.isFinite(liq)&&liq<15000)blockers.push("liquidity below Astra's $15K paper-test floor");
+ if(flags.includes("EXTREME_DUMP")||(Number.isFinite(move)&&move<=-30))blockers.push("extreme recent sell-off");
+ if(Number.isFinite(age)&&age<10)blockers.push("pair is less than 10 minutes old");
+ if(Number.isFinite(buy)&&buy<40)blockers.push("strong sell-side transaction pressure");
+ if(status.includes("UNVERIFIED")||status.includes("INSUFFICIENT"))cautions.push("identity / connection remains unverified");
+ if(flags.includes("EXTREME_PUMP")||(Number.isFinite(move)&&move>=80))cautions.push("extreme recent pump");
+ if(flags.includes("VERY_HIGH_TURNOVER"))cautions.push("very high turnover versus liquidity");
+ if(Number.isFinite(age)&&age>=10&&age<30)cautions.push("very young pair");
+ if(Number.isFinite(liq)&&liq>=15000&&liq<30000)cautions.push("moderate liquidity only");
+ if(Number.isFinite(liq)&&liq>=30000)positives.push("liquidity above $30K");
+ if(Number.isFinite(buy)&&buy>=50)positives.push("buy transactions are at least 50% of 1H flow");
+ if(Number.isFinite(age)&&age>=30)positives.push("pair has traded for at least 30 minutes");
+ if(Number.isFinite(priority)&&priority>=70)positives.push("high research-priority score");
+ if(status.includes("VERIFIED CONNECTION")||status.includes("PARTIALLY VERIFIED"))positives.push("research found independent verification evidence");
+ let label,cls;
+ if(blockers.length){label="REJECT FROM PAPER TEST";cls="filter-reject"}
+ else if(cautions.length>=2){label="WATCH / MANUAL REVIEW";cls="filter-watch"}
+ else {label="PAPER-TEST ELIGIBLE";cls="filter-eligible"}
+ return {label,cls,blockers,cautions,positives};
+}
+function paperFilterHtml(candidate,data){
+ const f=paperTestFilter(candidate,data);
+ const lines=[];
+ if(f.blockers.length)lines.push(`<div><b>Blockers:</b> ${f.blockers.map(esc).join("; ")}</div>`);
+ if(f.cautions.length)lines.push(`<div><b>Cautions:</b> ${f.cautions.map(esc).join("; ")}</div>`);
+ if(f.positives.length)lines.push(`<div><b>Supporting signals:</b> ${f.positives.map(esc).join("; ")}</div>`);
+ if(!lines.length)lines.push('<div>No strong filter signals were available.</div>');
+ return `<div class="paper-filter"><div class="paper-filter-head"><div><div class="paper-filter-title">Astra paper-test filter</div><b>${esc(f.label)}</b></div><span class="filter-pill ${f.cls}">${esc(f.label)}</span></div><div class="filter-reasons">${lines.join("")}</div><div class="filter-rule">Transparent rules only. This decides whether a token qualifies for simulated testing; it is not a buy recommendation and cannot place a real trade.</div></div>`;
+}
+function renderInvestigation(box,data,cached=false,candidate=null){
  const sources=(Array.isArray(data.sources)?data.sources:[]).map(src=>{const u=safeUrl(src?.url);return u?`<a class="source" href="${esc(u)}" target="_blank" rel="noopener">${esc(src?.title||"Source")}</a>`:""}).join("");
- if(box)box.innerHTML=`${reportHtml(data.report)}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>${cached?'<div class="cache-note">Loaded from Astra’s 30-minute local cache — no new AI call was made.</div>':''}`;
+ const filter=candidate?paperFilterHtml(candidate,data):"";
+ if(box)box.innerHTML=`${reportHtml(data.report)}${filter}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>${cached?'<div class="cache-note">Loaded from Astra’s 30-minute local cache — no new AI call was made.</div>':''}`;
 }
 async function investigateToken(address,btn,options={}){
  const candidate=lastScanCandidates.find(x=>x.tokenAddress===address);
@@ -362,13 +398,13 @@ async function investigateToken(address,btn,options={}){
  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Investigating…';}
  if(box)box.classList.remove("hidden");
  const cached=getCachedInvestigation(address);
- if(cached&&!options.force){renderInvestigation(box,cached,true);if(btn){btn.disabled=false;btn.textContent=original;}return true;}
+ if(cached&&!options.force){renderInvestigation(box,cached,true,candidate);if(btn){btn.disabled=false;btn.textContent=original;}return true;}
  if(box)box.innerHTML='<p>GPT is checking live web sources and comparing them with the token claim. This can take a little while…</p>';
  try{
   const r=await fetch(backendBase()+"/investigate",{method:"POST",headers:{"Content-Type":"application/json","X-Astra-Key":key},body:JSON.stringify({candidate})});
   const data=await r.json().catch(()=>({}));
   if(!r.ok||!data?.ok)throw Error(data?.error||`Investigation failed (${r.status})`);
-  setCachedInvestigation(address,data);renderInvestigation(box,data,false);return true;
+  setCachedInvestigation(address,data);renderInvestigation(box,data,false,candidate);return true;
  }catch(e){
   if(box)box.innerHTML=`<p class="negative">${esc(e.message)}</p>${/Unauthorized/i.test(e.message)?'<p>Check the Astra access key in Settings.</p>':""}`;
   return false;
