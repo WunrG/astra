@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090d">
 <link rel="manifest" href="manifest.json">
-<title>Astra v6.4</title>
+<title>Astra v6.5</title>
 <style>
 :root{--bg:#07090d;--card:#10141b;--card2:#151a23;--text:#f4f6f8;--muted:#8d97a5;--line:#252c36;--green:#39d98a;--red:#ff5d70;--yellow:#f3c84b;--blue:#6fa8ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button{font:inherit}
@@ -23,6 +23,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
 
 /* v6.4 Investigation UI */
 .inv-status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#101720}.inv-status-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.status-pill{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;white-space:nowrap}.status-verified{background:#102a20;color:#61e6a8;border:1px solid #1e513c}.status-partial{background:#142438;color:#8bc1ff;border:1px solid #274769}.status-unverified{background:#322a12;color:#ffd86b;border:1px solid #5a4d22}.status-contradicted{background:#35161b;color:#ff8e98;border:1px solid #632b34}.status-insufficient{background:#20252d;color:#b9c1cc;border:1px solid #343c48}.inv-section{padding:10px 0;border-top:1px solid #1b2430}.inv-section:first-of-type{border-top:0}.inv-section-title{font-size:12px;font-weight:900;margin-bottom:5px;color:#f0f4fb}.inv-section p{margin:5px 0;color:#c0c8d4}.evidence-tag{display:inline-block;font-size:9px;font-weight:900;letter-spacing:.02em;padding:2px 5px;border-radius:5px;margin-right:4px;vertical-align:1px}.ev-verified{background:#102a20;color:#61e6a8}.ev-claimed{background:#182438;color:#8bc1ff}.ev-unverified{background:#322a12;color:#ffd86b}.ev-contradicted{background:#35161b;color:#ff8e98}.inv-source-title{font-size:11px;font-weight:800;color:#dbe6ff;margin-top:10px}.investigation code{white-space:normal;color:#d5ddea;font-family:inherit;background:#131922;padding:1px 4px;border-radius:4px}
+.queuebar{display:flex;gap:8px;margin-top:10px}.queuebar button{flex:1}.queue-status{margin-top:10px;font-size:12px;color:#9eabc0}.cache-note{font-size:10px;color:#7f90aa;margin-top:6px}
 </style>
 </head>
 <body>
@@ -43,7 +44,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
     </div>
 
     <div class="card">
-      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v6.3 engine</span></div>
+      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v6.5 engine</span></div>
       <p id="analysis" class="muted">Loading market structure…</p>
       <div class="grid" id="metrics"></div>
     </div>
@@ -67,8 +68,10 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
 
   <section id="view-scanner" class="hidden">
     <div class="card">
-      <div class="row"><div><h2 style="margin:0">Meme Radar</h2><div class="muted" style="margin-top:5px">Live Solana discovery from the Astra Intelligence backend. Research shortlist only.</div></div><span class="tag">v6.3</span></div>
+      <div class="row"><div><h2 style="margin:0">Meme Radar</h2><div class="muted" style="margin-top:5px">Live Solana discovery from the Astra Intelligence backend. Research shortlist only.</div></div><span class="tag">v6.5</span></div>
       <button class="primary" id="scanBtn" style="margin-top:14px">Scan market</button>
+      <div class="queuebar"><button class="secondary" id="investigateTopBtn" disabled>🧠 Investigate top 3</button></div>
+      <div id="queueStatus" class="queue-status">AI queue ready. Manual investigations only until you enable auto research in Settings.</div>
       <div id="scanStatus" class="notice" style="margin-top:12px">Ready to scan.</div>
     </div>
     <div class="card"><div class="row"><h3 style="margin:0">Candidates</h3><span class="muted" id="scanTime">Not scanned</span></div><div id="scanResults" class="list" style="margin-top:12px"><div class="empty">Run a scan to find candidates.</div></div></div>
@@ -99,7 +102,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
       <label>Daily loss limit</label><select id="dailyLimit"><option>2%</option><option selected>3%</option><option>5%</option></select>
       <label>Leverage</label><select disabled><option>0x — paper spot only</option></select>
     </div>
-    <div class="card"><h3 style="margin-top:0">Astra Intelligence backend</h3><div class="notice">Meme Radar uses your Cloudflare Worker for live discovery. AI investigations are protected by your private Astra access key. Do not put that key in GitHub.</div><label>Worker URL</label><input id="backendUrl" value="https://astra-intelligence.ttuwhaia.workers.dev"><button class="secondary" id="saveBackend" style="margin-top:10px">Save & test backend</button><div id="backendStatus" class="notice" style="margin-top:10px">Backend URL is stored only on this device.</div><label>Astra access key</label><input id="astraAccessKey" type="password" autocomplete="off" placeholder="Enter the same ASTRA_ACCESS_KEY you saved in Cloudflare"><button class="secondary" id="saveAccessKey" style="margin-top:10px">Save access key on this device</button><div id="accessKeyStatus" class="notice" style="margin-top:10px">The key stays in this browser storage and is only sent to your Worker for protected AI investigations.</div></div>
+    <div class="card"><h3 style="margin-top:0">Astra Intelligence backend</h3><div class="notice">Meme Radar uses your Cloudflare Worker for live discovery. AI investigations are protected by your private Astra access key. Do not put that key in GitHub.</div><label>Worker URL</label><input id="backendUrl" value="https://astra-intelligence.ttuwhaia.workers.dev"><button class="secondary" id="saveBackend" style="margin-top:10px">Save & test backend</button><div id="backendStatus" class="notice" style="margin-top:10px">Backend URL is stored only on this device.</div><label>Astra access key</label><input id="astraAccessKey" type="password" autocomplete="off" placeholder="Enter the same ASTRA_ACCESS_KEY you saved in Cloudflare"><button class="secondary" id="saveAccessKey" style="margin-top:10px">Save access key on this device</button><div id="accessKeyStatus" class="notice" style="margin-top:10px">The key stays in this browser storage and is only sent to your Worker for protected AI investigations.</div><label>Automatic AI research after each scan</label><select id="autoInvestigate"><option value="0">OFF — manual only</option><option value="1">Top 1 candidate</option><option value="3">Top 3 candidates</option></select><div class="notice" style="margin-top:10px">Each new AI investigation can use paid OpenAI API usage. Astra caches completed reports for 30 minutes to reduce duplicate calls.</div></div>
     <div class="card"><button class="secondary" id="resetAstra">Reset paper account</button></div>
   </section>
 </div>
@@ -260,8 +263,12 @@ function updatePortfolio(){
 }
 const BACKEND_KEY="astra_backend_url";
 const ACCESS_KEY_KEY="astra_access_key";
+const AUTO_INVESTIGATE_KEY="astra_auto_investigate";
+const INVESTIGATION_CACHE_KEY="astra_investigation_cache_v1";
+const INVESTIGATION_CACHE_TTL=30*60*1000;
 const DEFAULT_BACKEND="https://astra-intelligence.ttuwhaia.workers.dev";
 let lastScanCandidates=[];
+let aiQueueRunning=false;
 function backendBase(){return (localStorage.getItem(BACKEND_KEY)||DEFAULT_BACKEND).replace(/\/$/,"")}
 function astraAccessKey(){return localStorage.getItem(ACCESS_KEY_KEY)||""}
 function compactUsd(x){const n=Number(x);if(!Number.isFinite(n))return "—";return "$"+Intl.NumberFormat(undefined,{notation:"compact",maximumFractionDigits:1}).format(n)}
@@ -324,27 +331,68 @@ function reportHtml(text){
  const sectionHtml=sections.filter(s=>s.title.toLowerCase()!=="research status").map(s=>`<div class="inv-section"><div class="inv-section-title">${esc(s.title)}</div>${s.lines.map(x=>`<p>${evidenceInline(x)}</p>`).join("")||'<p class="muted">No additional detail.</p>'}</div>`).join("");
  return `<div class="inv-status"><div><div class="inv-status-title">Research status</div><b>${esc(status.label)}</b></div><span class="status-pill ${status.cls}">${esc(status.label)}</span></div>${sectionHtml}`;
 }
-async function investigateToken(address,btn){
+function readInvestigationCache(){
+ try{return JSON.parse(localStorage.getItem(INVESTIGATION_CACHE_KEY)||"{}")||{}}catch{return {}}
+}
+function getCachedInvestigation(address){
+ const cache=readInvestigationCache(),item=cache[address];
+ if(!item||!item.savedAt||Date.now()-item.savedAt>INVESTIGATION_CACHE_TTL)return null;
+ return item.data||null;
+}
+function setCachedInvestigation(address,data){
+ const cache=readInvestigationCache();cache[address]={savedAt:Date.now(),data};
+ for(const [k,v] of Object.entries(cache))if(!v?.savedAt||Date.now()-v.savedAt>INVESTIGATION_CACHE_TTL)delete cache[k];
+ localStorage.setItem(INVESTIGATION_CACHE_KEY,JSON.stringify(cache));
+}
+function renderInvestigation(box,data,cached=false){
+ const sources=(Array.isArray(data.sources)?data.sources:[]).map(src=>{const u=safeUrl(src?.url);return u?`<a class="source" href="${esc(u)}" target="_blank" rel="noopener">${esc(src?.title||"Source")}</a>`:""}).join("");
+ if(box)box.innerHTML=`${reportHtml(data.report)}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>${cached?'<div class="cache-note">Loaded from Astra’s 30-minute local cache — no new AI call was made.</div>':''}`;
+}
+async function investigateToken(address,btn,options={}){
  const candidate=lastScanCandidates.find(x=>x.tokenAddress===address);
  if(!candidate)return;
  const key=astraAccessKey();
- const row=btn.closest(".scanrow"),box=row?.querySelector(".investigation");
+ const row=btn?.closest(".scanrow")||[...document.querySelectorAll(".scanrow")].find(r=>r.querySelector("[data-investigate]")?.dataset.investigate===address);
+ const box=row?.querySelector(".investigation");
  if(!key){
   if(box){box.classList.remove("hidden");box.innerHTML='<p>AI investigation needs your Astra access key. Open <b>Settings</b>, enter the same ASTRA_ACCESS_KEY you saved in Cloudflare, then tap Save access key.</p>';}
-  return;
+  return false;
  }
- const original=btn.textContent;btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Investigating…';
- if(box){box.classList.remove("hidden");box.innerHTML='<p>GPT is checking live web sources and comparing them with the token claim. This can take a little while…</p>';}
+ const original=btn?.textContent||"🧠 Investigate with AI";
+ if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Investigating…';}
+ if(box)box.classList.remove("hidden");
+ const cached=getCachedInvestigation(address);
+ if(cached&&!options.force){renderInvestigation(box,cached,true);if(btn){btn.disabled=false;btn.textContent=original;}return true;}
+ if(box)box.innerHTML='<p>GPT is checking live web sources and comparing them with the token claim. This can take a little while…</p>';
  try{
   const r=await fetch(backendBase()+"/investigate",{method:"POST",headers:{"Content-Type":"application/json","X-Astra-Key":key},body:JSON.stringify({candidate})});
   const data=await r.json().catch(()=>({}));
   if(!r.ok||!data?.ok)throw Error(data?.error||`Investigation failed (${r.status})`);
-  const sources=(Array.isArray(data.sources)?data.sources:[]).map(src=>{const u=safeUrl(src?.url);return u?`<a class="source" href="${esc(u)}" target="_blank" rel="noopener">${esc(src?.title||"Source")}</a>`:""}).join("");
-  if(box)box.innerHTML=`${reportHtml(data.report)}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>`;
+  setCachedInvestigation(address,data);renderInvestigation(box,data,false);return true;
  }catch(e){
-  if(box){box.innerHTML=`<p class="negative">${esc(e.message)}</p>${/Unauthorized/i.test(e.message)?'<p>Check the Astra access key in Settings.</p>':""}`;}
- }finally{btn.disabled=false;btn.textContent=original;}
+  if(box)box.innerHTML=`<p class="negative">${esc(e.message)}</p>${/Unauthorized/i.test(e.message)?'<p>Check the Astra access key in Settings.</p>':""}`;
+  return false;
+ }finally{if(btn){btn.disabled=false;btn.textContent=original;}}
 }
+async function investigateTop(count=3){
+ if(aiQueueRunning)return;
+ const queueStatus=document.getElementById("queueStatus"),topBtn=document.getElementById("investigateTopBtn");
+ if(!astraAccessKey()){queueStatus.textContent="Add your Astra access key in Settings before running the AI queue.";return;}
+ const targets=lastScanCandidates.slice(0,Math.min(count,lastScanCandidates.length));
+ if(!targets.length){queueStatus.textContent="Run a market scan first.";return;}
+ aiQueueRunning=true;topBtn.disabled=true;
+ let completed=0;
+ try{
+  for(let i=0;i<targets.length;i++){
+   const t=targets[i];queueStatus.textContent=`AI research ${i+1}/${targets.length}: ${t.name} (${t.symbol})…`;
+   const btn=[...document.querySelectorAll("[data-investigate]")].find(b=>b.dataset.investigate===t.tokenAddress);
+   const ok=await investigateToken(t.tokenAddress,btn);if(ok)completed++;
+   if(i<targets.length-1)await new Promise(r=>setTimeout(r,700));
+  }
+  queueStatus.textContent=`AI queue complete ✓ ${completed}/${targets.length} candidates investigated. Cached reports are reused for 30 minutes.`;
+ }finally{aiQueueRunning=false;topBtn.disabled=!lastScanCandidates.length;}
+}
+
 async function runScanner(){
  const btn=document.getElementById("scanBtn"),status=document.getElementById("scanStatus"),out=document.getElementById("scanResults");
  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Scanning…';status.textContent="Asking Astra Intelligence for fresh Solana candidates…";out.innerHTML='<div class="empty">Scanning live token activity…</div>';
@@ -352,6 +400,7 @@ async function runScanner(){
   const r=await fetch(backendBase()+"/scan",{cache:"no-store"});if(!r.ok)throw Error(`Backend returned ${r.status}`);const data=await r.json();
   if(!data?.ok)throw Error(data?.error||"Scanner returned an error");
   const rows=Array.isArray(data.candidates)?data.candidates:[];lastScanCandidates=rows;
+  document.getElementById("investigateTopBtn").disabled=!rows.length;
   if(!rows.length){out.innerHTML='<div class="empty">No candidates passed the current filters.</div>';status.textContent=`Scan completed. ${data.scannedProfiles||0} fresh profiles checked.`;return}
   out.innerHTML=rows.map((t,i)=>{
    const move=Number(t.priceChange1hPct),moveTxt=Number.isFinite(move)?`${move>=0?"+":""}${move.toFixed(1)}%`:"—",moveCls=move>=0?"positive":"negative";
@@ -364,6 +413,9 @@ async function runScanner(){
   out.querySelectorAll("[data-copy-address]").forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.copyAddress);const old=b.textContent;b.textContent="Copied ✓";setTimeout(()=>b.textContent=old,1200)}catch{b.textContent="Copy failed"}});
   out.querySelectorAll("[data-investigate]").forEach(b=>b.onclick=()=>investigateToken(b.dataset.investigate,b));
   const now=new Date();document.getElementById("scanTime").textContent=now.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});status.textContent=`Found ${rows.length} research candidates from ${data.scannedProfiles||0} fresh Solana profiles.`;
+  const autoCount=Number(localStorage.getItem(AUTO_INVESTIGATE_KEY)||0);
+  document.getElementById("queueStatus").textContent=autoCount?`Auto research enabled: top ${autoCount} candidate${autoCount===1?"":"s"}. Starting queue…`:"Scan complete. Tap Investigate top 3, or investigate a single token.";
+  if(autoCount>0)setTimeout(()=>investigateTop(autoCount),250);
  }catch(e){status.textContent="Scan failed: "+e.message;out.innerHTML='<div class="empty">Could not reach Astra Intelligence. Check the Worker URL in Settings.</div>'}
  finally{btn.disabled=false;btn.textContent="Scan market"}
 }
@@ -399,6 +451,9 @@ function refreshAlertStatus(){document.getElementById("alertStatus").textContent
 function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll("#coins .coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;localStorage.setItem(COIN_KEY,coin);lastSignal="";analysis=null;renderCoins();fetchData()})}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
 document.getElementById("scanBtn").onclick=runScanner;
+document.getElementById("investigateTopBtn").onclick=()=>investigateTop(3);
+document.getElementById("autoInvestigate").value=localStorage.getItem(AUTO_INVESTIGATE_KEY)||"0";
+document.getElementById("autoInvestigate").onchange=e=>{localStorage.setItem(AUTO_INVESTIGATE_KEY,e.target.value);document.getElementById("queueStatus").textContent=Number(e.target.value)?`Auto research enabled for top ${e.target.value} after each scan.`:"Automatic AI research is off. Manual investigations only."};
 document.getElementById("backendUrl").value=backendBase();
 document.getElementById("astraAccessKey").value=astraAccessKey();
 document.getElementById("saveBackend").onclick=saveAndTestBackend;
