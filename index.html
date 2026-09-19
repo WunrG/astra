@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090d">
 <link rel="manifest" href="manifest.json">
-<title>Astra v6.3</title>
+<title>Astra v6.4</title>
 <style>
 :root{--bg:#07090d;--card:#10141b;--card2:#151a23;--text:#f4f6f8;--muted:#8d97a5;--line:#252c36;--green:#39d98a;--red:#ff5d70;--yellow:#f3c84b;--blue:#6fa8ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button{font:inherit}
@@ -20,6 +20,9 @@ canvas{width:100%;height:250px;display:block;margin-top:12px;background:#0a0d12;
 .scanrow{display:grid;grid-template-columns:1fr auto;gap:8px 12px;padding:13px;background:#0b1016;border:1px solid var(--line);border-radius:14px}.scanmeta{font-size:12px;color:var(--muted);margin-top:5px}.scanbadge{font-size:12px;font-weight:800;padding:6px 8px;border-radius:9px;background:#17202b;align-self:start}.scan-actions{display:flex;gap:8px;margin-top:10px}.scan-actions button{padding:8px 10px}.spinner{display:inline-block;width:14px;height:14px;border:2px solid #ffffff33;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.flag{font-size:10px;font-weight:800;padding:4px 6px;border-radius:7px;background:#2b1720;color:#ff8390}.okflag{background:#10271d;color:#55dda0}.scanlink{display:inline-block;text-decoration:none;border:1px solid var(--line);background:#0d1117;color:#fff;border-radius:12px;padding:8px 10px;font-size:13px}.desc{font-size:12px;line-height:1.45;color:#aeb8c5;margin-top:8px}.investigation{grid-column:1/-1;margin-top:4px;padding:12px;border-radius:12px;background:#0a0e14;border:1px solid #202833;font-size:13px;line-height:1.55}.investigation h4{margin:10px 0 4px;font-size:13px}.investigation h4:first-child{margin-top:0}.investigation p{margin:4px 0;color:#c0c8d4}.sources{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.source{display:inline-block;text-decoration:none;border:1px solid var(--line);background:#111722;color:#c9d7ff;border-radius:10px;padding:6px 8px;font-size:11px}.ai-btn{border-color:#35435b}.ai-note{color:#91a3bc;font-size:11px;margin-top:8px}
 input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--line);border-radius:12px;padding:11px}label{font-size:13px;color:var(--muted);display:block;margin:12px 0 6px}
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+/* v6.4 Investigation UI */
+.inv-status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#101720}.inv-status-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.status-pill{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;white-space:nowrap}.status-verified{background:#102a20;color:#61e6a8;border:1px solid #1e513c}.status-partial{background:#142438;color:#8bc1ff;border:1px solid #274769}.status-unverified{background:#322a12;color:#ffd86b;border:1px solid #5a4d22}.status-contradicted{background:#35161b;color:#ff8e98;border:1px solid #632b34}.status-insufficient{background:#20252d;color:#b9c1cc;border:1px solid #343c48}.inv-section{padding:10px 0;border-top:1px solid #1b2430}.inv-section:first-of-type{border-top:0}.inv-section-title{font-size:12px;font-weight:900;margin-bottom:5px;color:#f0f4fb}.inv-section p{margin:5px 0;color:#c0c8d4}.evidence-tag{display:inline-block;font-size:9px;font-weight:900;letter-spacing:.02em;padding:2px 5px;border-radius:5px;margin-right:4px;vertical-align:1px}.ev-verified{background:#102a20;color:#61e6a8}.ev-claimed{background:#182438;color:#8bc1ff}.ev-unverified{background:#322a12;color:#ffd86b}.ev-contradicted{background:#35161b;color:#ff8e98}.inv-source-title{font-size:11px;font-weight:800;color:#dbe6ff;margin-top:10px}.investigation code{white-space:normal;color:#d5ddea;font-family:inherit;background:#131922;padding:1px 4px;border-radius:4px}
 </style>
 </head>
 <body>
@@ -265,12 +268,61 @@ function compactUsd(x){const n=Number(x);if(!Number.isFinite(n))return "—";ret
 function esc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]))}
 function safeUrl(v){try{const u=new URL(v);return u.protocol==="https:"?u.href:""}catch{return ""}}
 function ageText(m){const n=Number(m);if(!Number.isFinite(n))return "Age —";if(n<60)return `${Math.round(n)}m old`;if(n<1440)return `${(n/60).toFixed(n<120?1:0)}h old`;return `${(n/1440).toFixed(n<2880?1:0)}d old`}
+function cleanMarkdownText(v){return String(v||"").replace(/\*\*/g,"").replace(/`/g,"").trim()}
+function evidenceInline(line){
+ let s=esc(line);
+ const labels=[
+  ["VERIFIED","ev-verified"],
+  ["TOKEN-CLAIMED","ev-claimed"],
+  ["UNVERIFIED","ev-unverified"],
+  ["CONTRADICTED","ev-contradicted"]
+ ];
+ for(const [label,cls] of labels){
+  const patterns=[`**${label}:**`,`**${label}**:`,`${label}:`];
+  for(const p of patterns){
+   const ep=esc(p);
+   if(s.startsWith(ep)){
+    s=`<span class="evidence-tag ${cls}">${label}</span>`+s.slice(ep.length).trimStart();
+    break;
+   }
+  }
+ }
+ s=s.replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+ s=s.replace(/`([^`]+)`/g,"<code>$1</code>");
+ return s;
+}
+function reportStatus(text){
+ const raw=String(text||"");
+ const m=raw.match(/##\s*Research status\s*\n([\s\S]*?)(?=\n##\s|$)/i);
+ const body=cleanMarkdownText(m?.[1]||"").toUpperCase();
+ const statuses=[
+  ["CONTRADICTED / LIKELY IMPERSONATION","status-contradicted"],
+  ["VERIFIED CONNECTION","status-verified"],
+  ["PARTIALLY VERIFIED","status-partial"],
+  ["INSUFFICIENT EVIDENCE","status-insufficient"],
+  ["UNVERIFIED","status-unverified"]
+ ];
+ for(const [label,cls] of statuses)if(body.includes(label))return {label,cls};
+ return {label:"RESEARCH COMPLETE",cls:"status-insufficient"};
+}
 function reportHtml(text){
- return String(text||"").split(/\n/).map(line=>{
-  const t=line.trim();if(!t)return "";
-  if(t.startsWith("## "))return `<h4>${esc(t.slice(3))}</h4>`;
-  return `<p>${esc(t)}</p>`;
- }).join("");
+ const raw=String(text||"");
+ const status=reportStatus(raw);
+ const sections=[];
+ let current=null;
+ for(const line of raw.split(/\n/)){
+  const t=line.trim();
+  if(!t)continue;
+  if(t.startsWith("## ")){
+   current={title:cleanMarkdownText(t.slice(3)),lines:[]};
+   sections.push(current);
+  }else{
+   if(!current){current={title:"Summary",lines:[]};sections.push(current)}
+   current.lines.push(t);
+  }
+ }
+ const sectionHtml=sections.filter(s=>s.title.toLowerCase()!=="research status").map(s=>`<div class="inv-section"><div class="inv-section-title">${esc(s.title)}</div>${s.lines.map(x=>`<p>${evidenceInline(x)}</p>`).join("")||'<p class="muted">No additional detail.</p>'}</div>`).join("");
+ return `<div class="inv-status"><div><div class="inv-status-title">Research status</div><b>${esc(status.label)}</b></div><span class="status-pill ${status.cls}">${esc(status.label)}</span></div>${sectionHtml}`;
 }
 async function investigateToken(address,btn){
  const candidate=lastScanCandidates.find(x=>x.tokenAddress===address);
@@ -288,7 +340,7 @@ async function investigateToken(address,btn){
   const data=await r.json().catch(()=>({}));
   if(!r.ok||!data?.ok)throw Error(data?.error||`Investigation failed (${r.status})`);
   const sources=(Array.isArray(data.sources)?data.sources:[]).map(src=>{const u=safeUrl(src?.url);return u?`<a class="source" href="${esc(u)}" target="_blank" rel="noopener">${esc(src?.title||"Source")}</a>`:""}).join("");
-  if(box)box.innerHTML=`${reportHtml(data.report)}${sources?`<div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>`;
+  if(box)box.innerHTML=`${reportHtml(data.report)}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>`;
  }catch(e){
   if(box){box.innerHTML=`<p class="negative">${esc(e.message)}</p>${/Unauthorized/i.test(e.message)?'<p>Check the Astra access key in Settings.</p>':""}`;}
  }finally{btn.disabled=false;btn.textContent=original;}
