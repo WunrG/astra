@@ -245,10 +245,10 @@ function setView(v){
  if(v==="portfolio")updatePortfolio();if(v==="alerts")refreshAlertStatus();
 }
 function refreshAlertStatus(){document.getElementById("alertStatus").textContent=("Notification" in window)?("Permission: "+Notification.permission):"Notifications unavailable";}
-function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll(".coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;lastSignal="";renderCoins();fetchData()})}
+function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll("#coins .coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;lastSignal="";renderCoins();fetchData()})}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
 document.getElementById("openBtn").onclick=openPosition;document.getElementById("closeBtn").onclick=closePosition;
-document.getElementById("enableAlerts").onclick=enableNotifications;document.getElementById("testAlert").onclick=()=>notify("Astra test alert","Your Astra v4 phone notifications are working.");
+document.getElementById("enableAlerts").onclick=enableNotifications;document.getElementById("testAlert").onclick=()=>notify("Astra test alert","Your Astra phone notifications are working.");
 document.getElementById("clearHistory").onclick=()=>{if(confirm("Clear closed trade history?")){state.trades=[];save();updatePortfolio()}};
 document.getElementById("risk").onchange=e=>{state.risk=parseFloat(e.target.value);save()};document.getElementById("dailyLimit").onchange=e=>{state.dailyLimit=parseFloat(e.target.value);save()};
 document.getElementById("signalAlerts").onchange=e=>{state.signalAlerts=e.target.value;save()};document.getElementById("moveThreshold").onchange=()=>{};
