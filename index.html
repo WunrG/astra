@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090d">
 <link rel="manifest" href="manifest.json">
-<title>Astra v4</title>
+<title>Astra v5.2</title>
 <style>
 :root{--bg:#07090d;--card:#10141b;--card2:#151a23;--text:#f4f6f8;--muted:#8d97a5;--line:#252c36;--green:#39d98a;--red:#ff5d70;--yellow:#f3c84b;--blue:#6fa8ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button{font:inherit}
@@ -39,7 +39,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
     </div>
 
     <div class="card">
-      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v4 engine</span></div>
+      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v5.2 engine</span></div>
       <p id="analysis" class="muted">Loading market structure…</p>
       <div class="grid" id="metrics"></div>
     </div>
@@ -85,7 +85,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
       <label>Daily loss limit</label><select id="dailyLimit"><option>2%</option><option selected>3%</option><option>5%</option></select>
       <label>Leverage</label><select disabled><option>0x — paper spot only</option></select>
     </div>
-    <div class="card"><h3 style="margin-top:0">How v4 works</h3><div class="notice">Astra v4 is a rules-based paper-trading simulator. It combines trend, RSI, MACD-style momentum, volume, volatility and support/resistance into an explainable signal. It does not place real orders and does not use a private exchange key.</div></div>
+    <div class="card"><h3 style="margin-top:0">How v5.2 works</h3><div class="notice">Astra v5.2 is a rules-based paper-trading simulator. It combines trend, RSI, MACD-style momentum, volume, volatility and support/resistance into an explainable signal. It does not place real orders and does not use a private exchange key.</div></div>
     <div class="card"><button class="secondary" id="resetAstra">Reset paper account</button></div>
   </section>
 </div>
@@ -103,12 +103,16 @@ const COINS={
  XRP:{symbol:"XRPUSDT",name:"XRP",pair:"XRP / USDT"},
  ADA:{symbol:"ADAUSDT",name:"Cardano",pair:"Cardano / USDT"}
 };
-let coin="BTC", timeframe="1h", candles=[], analysis=null;
 const KEY="astra_v4_state";
+const VIEW_KEY="astra_view";
+const COIN_KEY="astra_coin";
+const TF_KEY="astra_timeframe";
+let coin=localStorage.getItem(COIN_KEY)||"BTC", timeframe=localStorage.getItem(TF_KEY)||"1h", candles=[], analysis=null;
+let currentView=localStorage.getItem(VIEW_KEY)||"astra";
 let state=JSON.parse(localStorage.getItem(KEY)||"null")||{cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};
 function save(){localStorage.setItem(KEY,JSON.stringify(state));}
-function money(x){return "$"+Number(x).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fmt(x){return Number(x).toLocaleString(undefined,{maximumFractionDigits:x<1?5:2});}
+function money(x){const n=Number(x);return Number.isFinite(n)?"$"+n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"—";}
+function fmt(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:n<1?5:2}):"—";}
 function sma(a,n){return a.slice(-n).reduce((s,x)=>s+x,0)/n;}
 function ema(a,n){let k=2/(n+1), e=a[0]; for(let i=1;i<a.length;i++)e=a[i]*k+e*(1-k); return e;}
 function rsi(a,n=14){if(a.length<n+1)return 50;let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];if(d>0)g+=d;else l-=d}return l===0?100:100-(100/(1+g/l));}
@@ -134,10 +138,21 @@ function analyze(){
  return {last,fast,slow,r,macd,volRatio,atr,support,resistance,score,signal,strength,volatility,reasons,trendLabel,rr,stopDist};
 }
 async function fetchData(){
+ analysis=null;
+ candles=[];
+ document.getElementById("price").textContent="Loading…";
+ document.getElementById("stopPreview").textContent="—";
+ document.getElementById("targetPreview").textContent="—";
+ document.getElementById("riskPreview").textContent="—";
+ document.getElementById("rrPreview").textContent="—";
  const url=`https://api.binance.com/api/v3/klines?symbol=${COINS[coin].symbol}&interval=${timeframe}&limit=100`;
  try{
   const res=await fetch(url,{cache:"no-store"}); if(!res.ok)throw Error("Market data unavailable");
-  candles=await res.json(); analysis=analyze(); render();
+  const data=await res.json();
+  if(!Array.isArray(data)||data.length<30)throw Error("Not enough market data");
+  candles=data; analysis=analyze();
+  if(!analysis||![analysis.last,analysis.fast,analysis.slow,analysis.r,analysis.macd,analysis.volRatio,analysis.atr,analysis.support,analysis.resistance,analysis.volatility].every(Number.isFinite)) throw Error("Invalid market data");
+  render();
   maybeSignalAlert();
  }catch(e){document.getElementById("analysis").textContent="Could not load market data right now. Refresh and try again.";console.error(e)}
 }
@@ -146,13 +161,14 @@ function render(){
  document.getElementById("pair").textContent=COINS[coin].pair;
  document.getElementById("price").textContent=money(a.last);
  const prev=+candles.at(-2)[4], pct=(a.last/prev-1)*100;
- const ch=document.getElementById("change");ch.textContent=(pct>=0?"+":"")+pct.toFixed(2)+"% last hour";ch.className="change "+(pct>=0?"up":"down");
+ const tfLabel=timeframe==="1h"?"1H":timeframe==="4h"?"4H":"1D";
+ const ch=document.getElementById("change");ch.textContent=(pct>=0?"+":"")+pct.toFixed(2)+"% last "+tfLabel;ch.className="change "+(pct>=0?"up":"down");
  const sig=document.getElementById("signal");sig.textContent=a.signal+" "+a.strength+"%";sig.className="signal "+a.signal;
  document.getElementById("chips").innerHTML=`<span class="chip">Support ${money(a.support)}</span><span class="chip">Resistance ${money(a.resistance)}</span><span class="chip">ATR ${money(a.atr)}</span><span class="chip">Vol ${a.volatility.toFixed(2)}%</span>`;
  document.getElementById("analysis").textContent=`Astra sees ${a.signal.toLowerCase()} conditions with ${a.strength}% signal strength. ${a.reasons.join("; ")}. This is a simulator, not financial advice.`;
  document.getElementById("metrics").innerHTML=[
  ["RSI",a.r.toFixed(1)],["Fast EMA",money(a.fast)],["Slow EMA",money(a.slow)],["Momentum",a.macd>=0?"Positive":"Negative"],
- ["Volume",a.volRatio.toFixed(2)+"× avg"],["Volatility",a.volatility.toFixed(2)+"%"],["Score",a.score>0?"+":""+a.score],["1h move",(pct>=0?"+":"")+pct.toFixed(2)+"%"],["Trend",a.trendLabel],["R:R",a.rr.toFixed(2)+" : 1"]
+ ["Volume",a.volRatio.toFixed(2)+"× avg"],["Volatility",a.volatility.toFixed(2)+"%"],["Score",a.score>0?"+":""+a.score],[tfLabel+" move",(pct>=0?"+":"")+pct.toFixed(2)+"%"],["Trend",a.trendLabel],["R:R",a.rr.toFixed(2)+" : 1"]
  ].map(x=>`<div class="metric"><span class="muted">${x[0]}</span><b>${x[1]}</b></div>`).join("");
  drawChart();
  renderPosition();
@@ -173,7 +189,7 @@ function renderPosition(){
  document.getElementById("stopPreview").textContent=money(p.stop);document.getElementById("targetPreview").textContent=money(p.target);document.getElementById("riskPreview").textContent=money(p.riskCash);document.getElementById("rrPreview").textContent="2.00 : 1";
 }
 function riskPlan(){
- if(!analysis)return null;
+ if(!analysis||!Number.isFinite(analysis.last)||!Number.isFinite(analysis.atr))return null;
  const entry=analysis.last;
  const atr=Math.max(analysis.atr,entry*0.006);
  const side=analysis.signal==="SELL"?"SHORT":"LONG";
@@ -186,7 +202,7 @@ function riskPlan(){
  return {entry,stop,target,side,qty,value,riskCash,rr:Math.abs(target-entry)/Math.abs(entry-stop)};
 }
 function renderRiskPreview(){
- const p=riskPlan();if(!p)return;
+ const p=riskPlan();if(!p||![p.stop,p.target,p.riskCash,p.rr].every(Number.isFinite))return;
  document.getElementById("stopPreview").textContent=money(p.stop);
  document.getElementById("targetPreview").textContent=money(p.target);
  document.getElementById("riskPreview").textContent=money(p.riskCash);
@@ -240,12 +256,13 @@ async function enableNotifications(){
  const p=await Notification.requestPermission();document.getElementById("alertStatus").textContent=p==="granted"?"Notifications enabled.":"Notifications are not enabled.";
 }
 function setView(v){
+ currentView=v;localStorage.setItem(VIEW_KEY,v);
  document.querySelectorAll("section[id^=view-]").forEach(x=>x.classList.add("hidden"));document.getElementById("view-"+v).classList.remove("hidden");
  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));
  if(v==="portfolio")updatePortfolio();if(v==="alerts")refreshAlertStatus();
 }
 function refreshAlertStatus(){document.getElementById("alertStatus").textContent=("Notification" in window)?("Permission: "+Notification.permission):"Notifications unavailable";}
-function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll("#coins .coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;lastSignal="";renderCoins();fetchData()})}
+function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll("#coins .coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;localStorage.setItem(COIN_KEY,coin);lastSignal="";analysis=null;renderCoins();fetchData()})}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
 document.getElementById("openBtn").onclick=openPosition;document.getElementById("closeBtn").onclick=closePosition;
 document.getElementById("enableAlerts").onclick=enableNotifications;document.getElementById("testAlert").onclick=()=>notify("Astra test alert","Your Astra phone notifications are working.");
@@ -253,7 +270,10 @@ document.getElementById("clearHistory").onclick=()=>{if(confirm("Clear closed tr
 document.getElementById("risk").onchange=e=>{state.risk=parseFloat(e.target.value);save()};document.getElementById("dailyLimit").onchange=e=>{state.dailyLimit=parseFloat(e.target.value);save()};
 document.getElementById("signalAlerts").onchange=e=>{state.signalAlerts=e.target.value;save()};document.getElementById("moveThreshold").onchange=()=>{};
 document.getElementById("resetAstra").onclick=()=>{if(confirm("Reset the paper account to $100 and clear positions/history?")){state={cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};save();location.reload()}};
-document.querySelectorAll("#timeframes .coin").forEach(b=>b.onclick=()=>{timeframe=b.dataset.tf;document.querySelectorAll("#timeframes .coin").forEach(x=>x.classList.toggle("active",x===b));lastSignal="";fetchData()});
+document.querySelectorAll("#timeframes .coin").forEach(b=>b.onclick=()=>{timeframe=b.dataset.tf;localStorage.setItem(TF_KEY,timeframe);document.querySelectorAll("#timeframes .coin").forEach(x=>x.classList.toggle("active",x===b));lastSignal="";analysis=null;fetchData()});
+setView(currentView);
+document.querySelectorAll("#coins .coin").forEach(x=>x.classList.toggle("active",x.dataset.coin===coin));
+document.querySelectorAll("#timeframes .coin").forEach(x=>x.classList.toggle("active",x.dataset.tf===timeframe));
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(console.warn);
 renderCoins();updatePortfolio();fetchData();setInterval(fetchData,60000);window.addEventListener("resize",()=>analysis&&drawChart());
 </script>
