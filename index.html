@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090d">
 <link rel="manifest" href="manifest.json">
-<title>Astra v6.6</title>
+<title>Astra v6.7</title>
 <style>
 :root{--bg:#07090d;--card:#10141b;--card2:#151a23;--text:#f4f6f8;--muted:#8d97a5;--line:#252c36;--green:#39d98a;--red:#ff5d70;--yellow:#f3c84b;--blue:#6fa8ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button{font:inherit}
@@ -24,6 +24,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
 /* v6.4 Investigation UI */
 .inv-status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#101720}.inv-status-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.status-pill{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;white-space:nowrap}.status-verified{background:#102a20;color:#61e6a8;border:1px solid #1e513c}.status-partial{background:#142438;color:#8bc1ff;border:1px solid #274769}.status-unverified{background:#322a12;color:#ffd86b;border:1px solid #5a4d22}.status-contradicted{background:#35161b;color:#ff8e98;border:1px solid #632b34}.status-insufficient{background:#20252d;color:#b9c1cc;border:1px solid #343c48}.inv-section{padding:10px 0;border-top:1px solid #1b2430}.inv-section:first-of-type{border-top:0}.inv-section-title{font-size:12px;font-weight:900;margin-bottom:5px;color:#f0f4fb}.inv-section p{margin:5px 0;color:#c0c8d4}.evidence-tag{display:inline-block;font-size:9px;font-weight:900;letter-spacing:.02em;padding:2px 5px;border-radius:5px;margin-right:4px;vertical-align:1px}.ev-verified{background:#102a20;color:#61e6a8}.ev-claimed{background:#182438;color:#8bc1ff}.ev-unverified{background:#322a12;color:#ffd86b}.ev-contradicted{background:#35161b;color:#ff8e98}.inv-source-title{font-size:11px;font-weight:800;color:#dbe6ff;margin-top:10px}.investigation code{white-space:normal;color:#d5ddea;font-family:inherit;background:#131922;padding:1px 4px;border-radius:4px}
 .queuebar{display:flex;gap:8px;margin-top:10px}.queuebar button{flex:1}.queue-status{margin-top:10px;font-size:12px;color:#9eabc0}.cache-note{font-size:10px;color:#7f90aa;margin-top:6px}.paper-filter{margin-top:11px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#0f151d}.paper-filter-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.paper-filter-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.filter-pill{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;white-space:nowrap}.filter-eligible{background:#102a20;color:#61e6a8;border:1px solid #1e513c}.filter-watch{background:#322a12;color:#ffd86b;border:1px solid #5a4d22}.filter-reject{background:#35161b;color:#ff8e98;border:1px solid #632b34}.filter-reasons{margin-top:8px;font-size:11px;line-height:1.5;color:#aeb8c5}.filter-reasons b{color:#dce5f2}.filter-rule{margin-top:7px;font-size:10px;color:#71819a}
+.paper-action{margin-top:10px;width:100%;border:1px solid #285b43;background:#11261d;color:#73e6ad;border-radius:11px;padding:10px;font-weight:850}.paper-action:disabled{opacity:.45}.meme-pos{padding:12px;background:#0b1016;border:1px solid var(--line);border-radius:14px}.meme-pos-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.meme-pos .small{font-size:11px;color:var(--muted);line-height:1.5;margin-top:5px}.meme-live{font-size:10px;font-weight:900;padding:4px 7px;border-radius:999px;background:#102a20;color:#61e6a8}.meme-warn{font-size:10px;color:#d5b85a;margin-top:8px}.meme-lab-title{display:flex;align-items:center;gap:8px}.meme-lab-badge{font-size:10px;font-weight:900;padding:4px 7px;border-radius:999px;background:#17202b;color:#9fb6d6}
 </style>
 </head>
 <body>
@@ -44,7 +45,7 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
     </div>
 
     <div class="card">
-      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v6.6 engine</span></div>
+      <div class="row"><h3 style="margin:0">Astra analysis</h3><span class="muted" id="engine">v6.7 engine</span></div>
       <p id="analysis" class="muted">Loading market structure…</p>
       <div class="grid" id="metrics"></div>
     </div>
@@ -68,14 +69,14 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
 
   <section id="view-scanner" class="hidden">
     <div class="card">
-      <div class="row"><div><h2 style="margin:0">Meme Radar</h2><div class="muted" style="margin-top:5px">Live Solana discovery from the Astra Intelligence backend. Research shortlist only.</div></div><span class="tag">v6.6</span></div>
+      <div class="row"><div><h2 style="margin:0">Meme Radar</h2><div class="muted" style="margin-top:5px">Live Solana discovery from the Astra Intelligence backend. Research shortlist only.</div></div><span class="tag">v6.7</span></div>
       <button class="primary" id="scanBtn" style="margin-top:14px">Scan market</button>
       <div class="queuebar"><button class="secondary" id="investigateTopBtn" disabled>🧠 Investigate top 3</button></div>
       <div id="queueStatus" class="queue-status">AI queue ready. Manual investigations only until you enable auto research in Settings.</div>
       <div id="scanStatus" class="notice" style="margin-top:12px">Ready to scan.</div>
     </div>
     <div class="card"><div class="row"><h3 style="margin:0">Candidates</h3><span class="muted" id="scanTime">Not scanned</span></div><div id="scanResults" class="list" style="margin-top:12px"><div class="empty">Run a scan to find candidates.</div></div></div>
-    <div class="card"><div class="notice">Research Priority decides what Astra investigates first. After AI research, the transparent Paper-test Filter marks a token PAPER-TEST ELIGIBLE, WATCH / MANUAL REVIEW, or REJECT FROM PAPER TEST. These labels control simulated research only and are not buy recommendations.</div></div>
+    <div class="card"><div class="notice">Research Priority decides what Astra investigates first. After AI research, the transparent Paper-test Filter marks a token PAPER-TEST ELIGIBLE, WATCH / MANUAL REVIEW, or REJECT FROM PAPER TEST. Eligible tokens can now be opened in the separate Meme Paper Lab for simulated tracking only.</div></div>
   </section>
 
   <section id="view-portfolio" class="hidden">
@@ -85,6 +86,20 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
       <div class="metric"><span class="muted">Wins</span><b id="wins">0</b></div>
       <div class="metric"><span class="muted">Losses</span><b id="losses">0</b></div>
       <div class="metric"><span class="muted">Win rate</span><b id="winRate">0%</b></div>
+    </div>
+    <div class="card">
+      <div class="row"><div class="meme-lab-title"><h3 style="margin:0">Meme Paper Lab</h3><span class="meme-lab-badge">SIM ONLY</span></div><button class="secondary" id="refreshMemePrices">Refresh prices</button></div>
+      <div class="notice" style="margin-top:10px">Separate $100 simulated account for AI-researched meme candidates. Prices refresh while Astra is open. Stops/targets are simulated and are not guaranteed to trigger while the app is closed.</div>
+      <div class="grid" style="margin-top:10px">
+        <div class="metric"><span class="muted">Meme equity</span><b id="memeEquity">$100.00</b></div>
+        <div class="metric"><span class="muted">Meme P/L</span><b id="memePnl">$0.00</b></div>
+        <div class="metric"><span class="muted">Open tests</span><b id="memeOpenCount">0</b></div>
+        <div class="metric"><span class="muted">Win rate</span><b id="memeWinRate">0%</b></div>
+      </div>
+      <h4 style="margin-bottom:8px">Open meme paper tests</h4>
+      <div id="memeOpenPositions" class="list"><div class="empty">No meme paper tests open.</div></div>
+      <div class="row" style="margin-top:14px"><h4 style="margin:0">Meme test history</h4><button class="secondary" id="clearMemeHistory">Clear</button></div>
+      <div id="memeHistory" class="list" style="margin-top:10px"><div class="empty">No completed meme paper tests.</div></div>
     </div>
     <div class="card"><div class="row"><h3 style="margin:0">Trade history</h3><button class="secondary" id="clearHistory">Clear</button></div><div id="history" class="list" style="margin-top:12px"></div></div>
   </section>
@@ -101,6 +116,8 @@ input,select{width:100%;background:#0b1016;color:#fff;border:1px solid var(--lin
       <label>Risk per trade</label><select id="risk"><option>0.5%</option><option selected>1%</option><option>2%</option></select>
       <label>Daily loss limit</label><select id="dailyLimit"><option>2%</option><option selected>3%</option><option>5%</option></select>
       <label>Leverage</label><select disabled><option>0x — paper spot only</option></select>
+      <label>Meme Paper Lab risk per test</label><select id="memeRisk"><option value="0.5">0.5%</option><option value="1" selected>1%</option><option value="2">2%</option></select>
+      <div class="notice" style="margin-top:10px">Meme paper tests use a simulated 15% stop, 30% target (2:1), and a maximum 25% account allocation. This is deliberately conservative for testing the research pipeline.</div>
     </div>
     <div class="card"><h3 style="margin-top:0">Astra Intelligence backend</h3><div class="notice">Meme Radar uses your Cloudflare Worker for live discovery. AI investigations are protected by your private Astra access key. Do not put that key in GitHub.</div><label>Worker URL</label><input id="backendUrl" value="https://astra-intelligence.ttuwhaia.workers.dev"><button class="secondary" id="saveBackend" style="margin-top:10px">Save & test backend</button><div id="backendStatus" class="notice" style="margin-top:10px">Backend URL is stored only on this device.</div><label>Astra access key</label><input id="astraAccessKey" type="password" autocomplete="off" placeholder="Enter the same ASTRA_ACCESS_KEY you saved in Cloudflare"><button class="secondary" id="saveAccessKey" style="margin-top:10px">Save access key on this device</button><div id="accessKeyStatus" class="notice" style="margin-top:10px">The key stays in this browser storage and is only sent to your Worker for protected AI investigations.</div><label>Automatic AI research after each scan</label><select id="autoInvestigate"><option value="0">OFF — manual only</option><option value="1">Top 1 candidate</option><option value="3">Top 3 candidates</option></select><div class="notice" style="margin-top:10px">Each new AI investigation can use paid OpenAI API usage. Astra caches completed reports for 30 minutes to reduce duplicate calls.</div></div>
     <div class="card"><button class="secondary" id="resetAstra">Reset paper account</button></div>
@@ -127,7 +144,14 @@ const TF_KEY="astra_timeframe";
 let coin=localStorage.getItem(COIN_KEY)||"BTC", timeframe=localStorage.getItem(TF_KEY)||"1h", candles=[], analysis=null;
 let currentView=localStorage.getItem(VIEW_KEY)||"astra";
 let state=JSON.parse(localStorage.getItem(KEY)||"null")||{cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};
+const MEME_KEY="astra_meme_paper_v1";
+let memeState=JSON.parse(localStorage.getItem(MEME_KEY)||"null")||{cash:100,positions:[],trades:[],risk:1};
+if(!Array.isArray(memeState.positions))memeState.positions=[];
+if(!Array.isArray(memeState.trades))memeState.trades=[];
+if(!Number.isFinite(Number(memeState.cash)))memeState.cash=100;
+if(!Number.isFinite(Number(memeState.risk)))memeState.risk=1;
 function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function saveMeme(){localStorage.setItem(MEME_KEY,JSON.stringify(memeState));}
 function money(x){const n=Number(x);return Number.isFinite(n)?"$"+n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):"—";}
 function fmt(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:n<1?5:2}):"—";}
 function sma(a,n){return a.slice(-n).reduce((s,x)=>s+x,0)/n;}
@@ -212,7 +236,9 @@ function riskPlan(){
  const side=analysis.signal==="SELL"?"SHORT":"LONG";
  const stop=side==="LONG"?entry-1.5*atr:entry+1.5*atr;
  const target=side==="LONG"?entry+3*atr:entry-3*atr;
- const riskCash=100*(state.risk/100);
+ const coreOpenValue=state.positions.filter(p=>p.open).reduce((s,p)=>s+(Number(p.value)||0),0);
+ const coreEquity=Math.max(0,state.cash+coreOpenValue);
+ const riskCash=coreEquity*(state.risk/100);
  const perUnit=Math.abs(entry-stop);
  const qty=perUnit>0?Math.min(riskCash/perUnit,(state.cash*0.5)/entry):0;
  const value=qty*entry;
@@ -260,6 +286,7 @@ function updatePortfolio(){
  document.getElementById("tradeCount").textContent=state.trades.length;document.getElementById("wins").textContent=w;document.getElementById("losses").textContent=l;
  document.getElementById("winRate").textContent=(w+l?((w/(w+l))*100).toFixed(0):0)+"%";
  const h=document.getElementById("history");h.innerHTML=state.trades.length?state.trades.map(t=>`<div class="trade"><div><b>${t.coin} ${t.side}</b><br><span class="muted">${new Date(t.exitTime).toLocaleString()}</span></div><div style="text-align:right"><b class="${t.pnl>=0?"positive":"negative"}">${t.pnl>=0?"+":""}${money(t.pnl)}</b><br><span class="muted">${money(t.entry)} → ${money(t.exit)}</span></div></div>`).join(""):'<div class="empty">No closed trades yet.</div>';
+ renderMemePortfolio();
 }
 const BACKEND_KEY="astra_backend_url";
 const ACCESS_KEY_KEY="astra_access_key";
@@ -379,10 +406,96 @@ function paperFilterHtml(candidate,data){
  if(!lines.length)lines.push('<div>No strong filter signals were available.</div>');
  return `<div class="paper-filter"><div class="paper-filter-head"><div><div class="paper-filter-title">Astra paper-test filter</div><b>${esc(f.label)}</b></div><span class="filter-pill ${f.cls}">${esc(f.label)}</span></div><div class="filter-reasons">${lines.join("")}</div><div class="filter-rule">Transparent rules only. This decides whether a token qualifies for simulated testing; it is not a buy recommendation and cannot place a real trade.</div></div>`;
 }
+function memeCurrentEquity(){
+ let equity=Number(memeState.cash)||0;
+ for(const p of memeState.positions.filter(x=>x.open)){
+  const px=Number(p.lastPrice)||Number(p.entry)||0;
+  equity+=(Number(p.qty)||0)*px;
+ }
+ return equity;
+}
+function memeOpenFor(address){return memeState.positions.find(p=>p.open&&p.tokenAddress===address)}
+async function fetchMemeSnapshot(address){
+ const key=astraAccessKey();
+ if(!key)throw Error("Astra access key is required for live meme prices");
+ const r=await fetch(backendBase()+"/token?address="+encodeURIComponent(address),{cache:"no-store",headers:{"X-Astra-Key":key}});
+ const data=await r.json().catch(()=>({}));
+ if(!r.ok||!data?.ok)throw Error(data?.error||`Price endpoint returned ${r.status}`);
+ return data.token;
+}
+function closeMemePosition(p,exitPrice,reason){
+ if(!p?.open)return;
+ const exit=Number(exitPrice);if(!Number.isFinite(exit)||exit<=0)return;
+ const qty=Number(p.qty)||0;
+ const proceeds=qty*exit;
+ const pnl=proceeds-(Number(p.value)||0);
+ memeState.cash+=proceeds;
+ p.open=false;p.exit=exit;p.pnl=pnl;p.reason=reason;p.exitTime=new Date().toISOString();p.lastPrice=exit;
+ memeState.trades.unshift({...p});memeState.trades=memeState.trades.slice(0,150);
+ saveMeme();
+}
+async function openMemePaper(candidate,data,btn){
+ const filter=paperTestFilter(candidate,data);
+ if(filter.label!=="PAPER-TEST ELIGIBLE")return;
+ if(memeOpenFor(candidate.tokenAddress)){if(btn)btn.textContent="Paper test already open";return;}
+ const original=btn?.textContent||"Start meme paper test";
+ if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Getting live price…';}
+ try{
+  const snap=await fetchMemeSnapshot(candidate.tokenAddress);
+  const entry=Number(snap?.priceUsd);
+  if(!Number.isFinite(entry)||entry<=0)throw Error("No valid live price returned");
+  const equity=memeCurrentEquity();
+  const riskCash=Math.max(0,equity*(Number(memeState.risk||1)/100));
+  const stopPct=.15,targetPct=.30;
+  const perUnit=entry*stopPct;
+  const maxValue=Math.max(0,memeState.cash*.25);
+  const qty=perUnit>0?Math.min(riskCash/perUnit,maxValue/entry):0;
+  const value=qty*entry;
+  if(!Number.isFinite(qty)||qty<=0||value<=0)throw Error("Not enough simulated cash for this test");
+  const p={id:Date.now(),name:candidate.name,symbol:candidate.symbol,tokenAddress:candidate.tokenAddress,entry,stop:entry*(1-stopPct),target:entry*(1+targetPct),qty,value,riskCash,open:true,time:new Date().toISOString(),lastPrice:entry,lastUpdate:new Date().toISOString(),pairUrl:snap?.pairUrl||candidate.pairUrl||null,liquidityUsd:Number(snap?.liquidityUsd)||null,researchStatus:reportStatus(data?.report||"").label,researchPriority:Number(candidate.researchPriority)||0};
+  memeState.cash-=value;memeState.positions.push(p);saveMeme();renderMemePortfolio();
+  if(btn){btn.textContent="Meme paper test opened ✓";btn.disabled=true;}
+  notify("Astra meme paper test opened",`${candidate.symbol}: simulated entry ${money(entry)} · stop -15% · target +30%.`);
+ }catch(e){if(btn){btn.disabled=false;btn.textContent=original;}alert("Could not open meme paper test: "+e.message)}
+}
+async function updateMemePrices(){
+ const open=memeState.positions.filter(p=>p.open);
+ if(!open.length){renderMemePortfolio();return;}
+ const key=astraAccessKey();
+ if(!key){renderMemePortfolio("Add your Astra access key in Settings to refresh live meme prices.");return;}
+ for(const p of open){
+  try{
+   const snap=await fetchMemeSnapshot(p.tokenAddress);
+   const px=Number(snap?.priceUsd);if(!Number.isFinite(px)||px<=0)continue;
+   p.lastPrice=px;p.lastUpdate=new Date().toISOString();p.liquidityUsd=Number(snap?.liquidityUsd)||p.liquidityUsd;p.pairUrl=snap?.pairUrl||p.pairUrl;
+   if(px<=Number(p.stop))closeMemePosition(p,px,"STOP");
+   else if(px>=Number(p.target))closeMemePosition(p,px,"TARGET");
+  }catch(e){p.priceError=e.message}
+ }
+ saveMeme();renderMemePortfolio();
+}
+function renderMemePortfolio(note=""){
+ const equity=memeCurrentEquity();
+ const pnl=equity-100;
+ const open=memeState.positions.filter(p=>p.open);
+ const wins=memeState.trades.filter(t=>(Number(t.pnl)||0)>0).length;
+ const losses=memeState.trades.filter(t=>(Number(t.pnl)||0)<0).length;
+ const el=id=>document.getElementById(id);
+ if(!el("memeEquity"))return;
+ el("memeEquity").textContent=money(equity);el("memePnl").textContent=(pnl>=0?"+":"")+money(pnl);el("memePnl").className=pnl>=0?"positive":"negative";el("memeOpenCount").textContent=open.length;el("memeWinRate").textContent=(wins+losses?Math.round(wins/(wins+losses)*100):0)+"%";
+ el("memeOpenPositions").innerHTML=open.length?open.map(p=>{const px=Number(p.lastPrice)||Number(p.entry);const live=(px-p.entry)*p.qty;const pct=(px/p.entry-1)*100;const link=safeUrl(p.pairUrl);return `<div class="meme-pos"><div class="meme-pos-head"><div><b>${esc(p.name)} <span class="muted">${esc(p.symbol)}</span></b><div class="small">Entry ${money(p.entry)} · Live ${money(px)} · <span class="${live>=0?"positive":"negative"}">${pct>=0?"+":""}${pct.toFixed(1)}% / ${live>=0?"+":""}${money(live)}</span></div><div class="small">Stop ${money(p.stop)} · Target ${money(p.target)} · Risk ${money(p.riskCash)}</div><div class="small">${p.lastUpdate?"Updated "+new Date(p.lastUpdate).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}):"Waiting for price"}${p.liquidityUsd?" · Liq "+compactUsd(p.liquidityUsd):""}</div>${p.priceError?`<div class="meme-warn">Last refresh issue: ${esc(p.priceError)}</div>`:""}</div><span class="meme-live">LIVE SIM</span></div><div class="scan-actions">${link?`<a class="scanlink" href="${esc(link)}" target="_blank" rel="noopener">DEX Screener</a>`:""}<button class="secondary" data-close-meme="${esc(p.tokenAddress)}">Close test</button></div></div>`}).join(""):'<div class="empty">No meme paper tests open.</div>';
+ el("memeOpenPositions").querySelectorAll("[data-close-meme]").forEach(b=>b.onclick=()=>{const p=memeOpenFor(b.dataset.closeMeme);if(p){closeMemePosition(p,Number(p.lastPrice)||Number(p.entry),"MANUAL");renderMemePortfolio();}});
+ el("memeHistory").innerHTML=memeState.trades.length?memeState.trades.map(t=>`<div class="trade"><div><b>${esc(t.symbol||t.name)} MEME TEST</b><br><span class="muted">${new Date(t.exitTime).toLocaleString()} · ${esc(t.reason||"CLOSED")}</span></div><div style="text-align:right"><b class="${t.pnl>=0?"positive":"negative"}">${t.pnl>=0?"+":""}${money(t.pnl)}</b><br><span class="muted">${money(t.entry)} → ${money(t.exit)}</span></div></div>`).join(""):'<div class="empty">No completed meme paper tests.</div>';
+ if(note&&open.length)el("memeOpenPositions").insertAdjacentHTML("afterbegin",`<div class="notice">${esc(note)}</div>`);
+}
 function renderInvestigation(box,data,cached=false,candidate=null){
  const sources=(Array.isArray(data.sources)?data.sources:[]).map(src=>{const u=safeUrl(src?.url);return u?`<a class="source" href="${esc(u)}" target="_blank" rel="noopener">${esc(src?.title||"Source")}</a>`:""}).join("");
+ const filterData=candidate?paperTestFilter(candidate,data):null;
  const filter=candidate?paperFilterHtml(candidate,data):"";
- if(box)box.innerHTML=`${reportHtml(data.report)}${filter}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>${cached?'<div class="cache-note">Loaded from Astra’s 30-minute local cache — no new AI call was made.</div>':''}`;
+ const existing=candidate?memeOpenFor(candidate.tokenAddress):null;
+ const paperAction=filterData?.label==="PAPER-TEST ELIGIBLE"?`<button class="paper-action" data-start-meme="${esc(candidate.tokenAddress)}" ${existing?"disabled":""}>${existing?"Meme paper test already open":"Start meme paper test"}</button>`:"";
+ if(box)box.innerHTML=`${reportHtml(data.report)}${filter}${paperAction}${sources?`<div class="inv-source-title">Sources used</div><div class="sources">${sources}</div>`:""}<div class="ai-note">Model: ${esc(data.model||"AI investigator")} · Research only, not a trade instruction.</div>${cached?'<div class="cache-note">Loaded from Astra’s 30-minute local cache — no new AI call was made.</div>':''}`;
+ const paperBtn=box?.querySelector("[data-start-meme]");if(paperBtn&&candidate)paperBtn.onclick=()=>openMemePaper(candidate,data,paperBtn);
 }
 async function investigateToken(address,btn,options={}){
  const candidate=lastScanCandidates.find(x=>x.tokenAddress===address);
@@ -481,7 +594,7 @@ function setView(v){
  currentView=v;localStorage.setItem(VIEW_KEY,v);
  document.querySelectorAll("section[id^=view-]").forEach(x=>x.classList.add("hidden"));document.getElementById("view-"+v).classList.remove("hidden");
  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));
- if(v==="portfolio")updatePortfolio();if(v==="alerts")refreshAlertStatus();
+ if(v==="portfolio"){updatePortfolio();updateMemePrices();}if(v==="alerts")refreshAlertStatus();
 }
 function refreshAlertStatus(){document.getElementById("alertStatus").textContent=("Notification" in window)?("Permission: "+Notification.permission):"Notifications unavailable";}
 function renderCoins(){document.getElementById("coins").innerHTML=Object.keys(COINS).map(k=>`<button class="coin ${k===coin?"active":""}" data-coin="${k}">${k}</button>`).join("");document.querySelectorAll("#coins .coin").forEach(b=>b.onclick=()=>{coin=b.dataset.coin;localStorage.setItem(COIN_KEY,coin);lastSignal="";analysis=null;renderCoins();fetchData()})}
@@ -497,15 +610,19 @@ document.getElementById("saveAccessKey").onclick=saveAccessKey;
 document.getElementById("openBtn").onclick=openPosition;document.getElementById("closeBtn").onclick=closePosition;
 document.getElementById("enableAlerts").onclick=enableNotifications;document.getElementById("testAlert").onclick=()=>notify("Astra test alert","Your Astra phone notifications are working.");
 document.getElementById("clearHistory").onclick=()=>{if(confirm("Clear closed trade history?")){state.trades=[];save();updatePortfolio()}};
+document.getElementById("refreshMemePrices").onclick=updateMemePrices;
+document.getElementById("clearMemeHistory").onclick=()=>{if(confirm("Clear completed meme paper-test history?")){memeState.trades=[];saveMeme();renderMemePortfolio()}};
+document.getElementById("memeRisk").value=String(memeState.risk||1);
+document.getElementById("memeRisk").onchange=e=>{memeState.risk=parseFloat(e.target.value)||1;saveMeme();renderMemePortfolio()};
 document.getElementById("risk").onchange=e=>{state.risk=parseFloat(e.target.value);save()};document.getElementById("dailyLimit").onchange=e=>{state.dailyLimit=parseFloat(e.target.value);save()};
 document.getElementById("signalAlerts").onchange=e=>{state.signalAlerts=e.target.value;save()};document.getElementById("moveThreshold").onchange=()=>{};
-document.getElementById("resetAstra").onclick=()=>{if(confirm("Reset the paper account to $100 and clear positions/history?")){state={cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};save();location.reload()}};
+document.getElementById("resetAstra").onclick=()=>{if(confirm("Reset both paper accounts to $100 and clear all positions/history?")){state={cash:100,positions:[],trades:[],risk:1,dailyLimit:3,signalAlerts:"on",moveThreshold:2};memeState={cash:100,positions:[],trades:[],risk:1};save();saveMeme();location.reload()}};
 document.querySelectorAll("#timeframes .coin").forEach(b=>b.onclick=()=>{timeframe=b.dataset.tf;localStorage.setItem(TF_KEY,timeframe);document.querySelectorAll("#timeframes .coin").forEach(x=>x.classList.toggle("active",x===b));lastSignal="";analysis=null;fetchData()});
 setView(currentView);
 document.querySelectorAll("#coins .coin").forEach(x=>x.classList.toggle("active",x.dataset.coin===coin));
 document.querySelectorAll("#timeframes .coin").forEach(x=>x.classList.toggle("active",x.dataset.tf===timeframe));
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(console.warn);
-renderCoins();updatePortfolio();fetchData();setInterval(fetchData,60000);window.addEventListener("resize",()=>analysis&&drawChart());
+renderCoins();updatePortfolio();renderMemePortfolio();fetchData();updateMemePrices();setInterval(fetchData,60000);setInterval(updateMemePrices,60000);window.addEventListener("resize",()=>analysis&&drawChart());
 </script>
 </body>
 </html>
